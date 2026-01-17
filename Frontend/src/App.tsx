@@ -11,6 +11,15 @@ import { TrafficCongestion } from './pages/TrafficCongestion';
 import { HealthcareLoad } from './pages/HealthcareLoad';
 import { SchoolPerformance } from './pages/SchoolPerformance';
 import { UrbanDevelopment } from './pages/UrbanDevelopment';
+import { AreaDemandPage } from './pages/AreaDemandPage';
+import { FootfallEstimationPage } from './pages/FootfallEstimationPage';
+import { CitizenMapPage } from './pages/CitizenMapPage';
+import { GovernmentChatbotPage } from './pages/GovernmentChatbotPage';
+import { ScenarioManagementPage } from './pages/ScenarioManagementPage';
+import { GovernmentAnalyticsPage } from './pages/GovernmentAnalyticsPage';
+import { GovernmentForecastingPage } from './pages/GovernmentForecastingPage';
+import { GovernmentMapPage } from './pages/GovernmentMapPage';
+import { TimelineAnalysisPage } from './pages/TimelineAnalysisPage';
 
 function App() {
   return (
@@ -21,6 +30,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login/:role" element={<LoginPage />} />
             
+            {/* Citizen Routes */}
             <Route 
               path="/citizen" 
               element={
@@ -31,9 +41,36 @@ function App() {
             />
             
             <Route 
+              path="/citizen/map" 
+              element={
+                <ProtectedRoute>
+                  <CitizenMapPage />
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/citizen/area-demand" 
+              element={
+                <ProtectedRoute>
+                  <AreaDemandPage />
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/citizen/footfall" 
+              element={
+                <ProtectedRoute>
+                  <FootfallEstimationPage />
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
               path="/air-quality" 
               element={
-                <ProtectedRoute requiredRole="citizen">
+                <ProtectedRoute>
                   <AirQualityIndex />
                 </ProtectedRoute>
               } 
@@ -42,7 +79,7 @@ function App() {
             <Route 
               path="/traffic-congestion" 
               element={
-                <ProtectedRoute requiredRole="citizen">
+                <ProtectedRoute>
                   <TrafficCongestion />
                 </ProtectedRoute>
               } 
@@ -51,7 +88,7 @@ function App() {
             <Route 
               path="/healthcare-load" 
               element={
-                <ProtectedRoute requiredRole="citizen">
+                <ProtectedRoute>
                   <HealthcareLoad />
                 </ProtectedRoute>
               } 
@@ -60,7 +97,7 @@ function App() {
             <Route 
               path="/school-performance" 
               element={
-                <ProtectedRoute requiredRole="citizen">
+                <ProtectedRoute>
                   <SchoolPerformance />
                 </ProtectedRoute>
               } 
@@ -69,17 +106,72 @@ function App() {
             <Route 
               path="/urban-development" 
               element={
-                <ProtectedRoute requiredRole="citizen">
+                <ProtectedRoute>
                   <UrbanDevelopment />
                 </ProtectedRoute>
               } 
             />
             
+            {/* Government Routes */}
             <Route 
               path="/government" 
               element={
                 <ProtectedRoute requiredRole="government">
                   <GovernmentDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/government/analytics" 
+              element={
+                <ProtectedRoute requiredRole="government">
+                  <GovernmentAnalyticsPage />
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/government/forecasting" 
+              element={
+                <ProtectedRoute requiredRole="government">
+                  <GovernmentForecastingPage />
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/government/chatbot" 
+              element={
+                <ProtectedRoute requiredRole="government">
+                  <GovernmentChatbotPage />
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/government/scenarios" 
+              element={
+                <ProtectedRoute requiredRole="government">
+                  <ScenarioManagementPage />
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/government/map" 
+              element={
+                <ProtectedRoute requiredRole="government">
+                  <GovernmentMapPage />
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/government/timeline" 
+              element={
+                <ProtectedRoute requiredRole="government">
+                  <TimelineAnalysisPage />
                 </ProtectedRoute>
               } 
             />
