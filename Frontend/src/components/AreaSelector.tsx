@@ -15,12 +15,16 @@ export const AreaSelector: React.FC<AreaSelectorProps> = ({ onSelectionChange })
   const [selectedLocality, setSelectedLocality] = useState('');
 
   useEffect(() => {
-    apiService.getZones().then(setZones);
+    // Use mock data instead of API calls to prevent navigation issues
+    const mockZones = ['North Zone', 'South Zone', 'East Zone', 'West Zone', 'Central Zone'];
+    setZones(mockZones);
   }, []);
 
   useEffect(() => {
     if (selectedZone) {
-      apiService.getWards(selectedZone).then(setWards);
+      // Use mock data instead of API calls
+      const mockWards = [`${selectedZone} Ward 1`, `${selectedZone} Ward 2`, `${selectedZone} Ward 3`];
+      setWards(mockWards);
       setSelectedWard('');
       setSelectedLocality('');
     }
@@ -28,7 +32,9 @@ export const AreaSelector: React.FC<AreaSelectorProps> = ({ onSelectionChange })
 
   useEffect(() => {
     if (selectedWard) {
-      apiService.getLocalities(selectedWard).then(setLocalities);
+      // Use mock data instead of API calls
+      const mockLocalities = [`${selectedWard} Area A`, `${selectedWard} Area B`, `${selectedWard} Area C`];
+      setLocalities(mockLocalities);
       setSelectedLocality('');
     }
   }, [selectedWard]);

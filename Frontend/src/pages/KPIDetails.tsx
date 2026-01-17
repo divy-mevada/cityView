@@ -69,7 +69,7 @@ export const KPIDetails: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: '#D1E7F0' }}>
       <header className="shadow-sm border-b bg-[#BDE8F5]">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-4">

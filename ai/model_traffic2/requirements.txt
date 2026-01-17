@@ -19,8 +19,6 @@ pyproj
 # ---------- Machine Learning ----------
 scikit-learn
 joblib
-requests
-python-dotenv
 
 # ---------- Visualization (optional, but prophet expects it) ----------
 matplotlib

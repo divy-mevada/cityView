@@ -1,0 +1,62 @@
+{
+  "description": "Ahmedabad city zones, wards, and localities mapping (hardcoded for mock data)",
+  "zones": [
+    {
+      "name": "West Zone",
+      "bounds": {
+        "lat_min": 23.0000,
+        "lat_max": 23.0800,
+        "lng_min": 72.5000,
+        "lng_max": 72.6000
+      },
+      "wards": ["Vastrapur", "Bodakdev", "Satellite"],
+      "center": {
+        "lat": 23.0400,
+        "lng": 72.5500
+      }
+    },
+    {
+      "name": "East Zone",
+      "bounds": {
+        "lat_min": 22.9500,
+        "lat_max": 23.0500,
+        "lng_min": 72.5500,
+        "lng_max": 72.6500
+      },
+      "wards": ["Maninagar", "Nikol", "Vastral"],
+      "center": {
+        "lat": 23.0000,
+        "lng": 72.6000
+      }
+    },
+    {
+      "name": "North Zone",
+      "bounds": {
+        "lat_min": 23.0500,
+        "lat_max": 23.1500,
+        "lng_min": 72.5000,
+        "lng_max": 72.6000
+      },
+      "wards": ["Sabarmati", "Chandkheda", "Motera"],
+      "center": {
+        "lat": 23.1000,
+        "lng": 72.5500
+      }
+    },
+    {
+      "name": "South Zone",
+      "bounds": {
+        "lat_min": 22.9000,
+        "lat_max": 23.0000,
+        "lng_min": 72.5000,
+        "lng_max": 72.6500
+      },
+      "wards": ["Sarkhej", "Juhapura", "Bopal"],
+      "center": {
+        "lat": 22.9500,
+        "lng": 72.5750
+      }
+    }
+  ],
+  "note": "This is mock data for Ahmedabad city. In production, this will be replaced with PostgreSQL database integration."
+}

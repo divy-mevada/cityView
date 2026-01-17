@@ -1,4 +1,5 @@
 import type { KPIData, AreaData, TimelineOption } from '../types';
+import { weatherService } from './weatherService';
 
 // Mock data for Ahmedabad
 const mockKPIData: KPIData = {
@@ -123,5 +124,18 @@ export const apiService = {
     };
 
     return generatePredictedData(baseValues[type] || 50);
+  },
+
+  // Weather and AQI services
+  getLocationWeatherAndAQI: async (lat: number, lng: number) => {
+    return weatherService.getLocationData(lat, lng);
+  },
+
+  getWeatherData: async (lat: number, lng: number) => {
+    return weatherService.getWeatherData(lat, lng);
+  },
+
+  getAQIData: async (lat: number, lng: number) => {
+    return weatherService.getAQIData(lat, lng);
   }
 };

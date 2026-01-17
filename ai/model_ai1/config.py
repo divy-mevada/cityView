@@ -1,11 +1,4 @@
-import os
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
-
-OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
-AQICN_API_KEY = os.getenv("AQICN_API_KEY")
+OPENWEATHER_API_KEY = ""
 
 AQI_STATIONS = [
     {"id": "bopal", "lat": 23.0395, "lon": 72.4678},
