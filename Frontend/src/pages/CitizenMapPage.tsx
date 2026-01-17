@@ -64,15 +64,17 @@ export const CitizenMapPage: React.FC = () => {
         </div>
 
         {/* Full Width Map */}
-        <div className="card h-[calc(100vh-200px)] relative">
+        <div className="card h-[calc(100vh-200px)] relative overflow-hidden">
           <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <Map className="w-5 h-5" />
             Ahmedabad City Map
           </h3>
-          <MapComponent 
-            layers={['traffic', 'aqi']} 
-            onLocationSelect={handleLocationSelect}
-          />
+          <div className="h-[calc(100%-3rem)]">
+            <MapComponent 
+              layers={['temperature', 'aqi']} 
+              onLocationSelect={handleLocationSelect}
+            />
+          </div>
           
           {/* Generate Button - Fixed at bottom right of map */}
           <button
