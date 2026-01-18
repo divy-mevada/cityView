@@ -1,6 +1,6 @@
 # CityView
 
-**Will be depoloyed soom (currently working on auth)**
+**Will be depoloyed soon (currently working on auth)**
 
 **Integrated Urban Intelligence Orchestrator** for Ahmedabad city - Real-time analytics, AI-powered insights, and comprehensive urban management dashboard.
 
