@@ -6,11 +6,11 @@ import { MapComponent } from '../components/MapComponent';
 import { LogOut } from 'lucide-react';
 
 export const GovernmentChatbotPage: React.FC = () => {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   return (
     <div className="flex min-h-screen" style={{ backgroundColor: '#D1E7F0' }}>
-      <Sidebar userRole="government" />
-      
+      <Sidebar userRole={(user?.role as 'citizen' | 'government') || 'government'} />
+
       <main className="flex-1 ml-64 p-6">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">What-If Scenario Simulator</h1>
@@ -30,7 +30,7 @@ export const GovernmentChatbotPage: React.FC = () => {
           </div>
         </div>
       </main>
-      
+
       {/* Logout Button - Fixed at bottom left */}
       <button
         onClick={logout}

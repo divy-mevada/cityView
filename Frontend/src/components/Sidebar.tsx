@@ -1,22 +1,23 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { 
-  Home, 
-  Map, 
-  Activity, 
-  Car, 
-  Stethoscope, 
-  GraduationCap, 
-  Building2, 
-  BarChart3, 
-  MessageSquare, 
-  Settings, 
+import {
+  Home,
+  Map,
+  Activity,
+  Car,
+  Stethoscope,
+  GraduationCap,
+  Building2,
+  BarChart3,
+  MessageSquare,
+  Settings,
   LogOut,
   Users,
   TrendingUp,
   MapPin,
-  Calendar
+  Calendar,
+  Database
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -38,11 +39,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole }) => {
     { icon: Building2, label: 'Urban Development', path: '/urban-development' },
     { icon: MapPin, label: 'Area Demand', path: '/citizen/area-demand' },
     { icon: Users, label: 'Footfall Estimation', path: '/citizen/footfall' },
+    { icon: MessageSquare, label: 'What If', path: '/what-if' },
   ];
 
   const governmentMenuItems = [
     { icon: Home, label: 'Dashboard', path: '/government' },
-    { icon: Map, label: 'Interactive Map', path: '/citizen/map' },
+    { icon: Map, label: 'Interactive Map', path: '/government/map' },
     { icon: Activity, label: 'Air Quality', path: '/air-quality' },
     { icon: Car, label: 'Traffic', path: '/traffic-congestion' },
     { icon: Stethoscope, label: 'Healthcare', path: '/healthcare-load' },
@@ -50,6 +52,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole }) => {
     { icon: Building2, label: 'Urban Development', path: '/urban-development' },
     { icon: MapPin, label: 'Area Demand', path: '/citizen/area-demand' },
     { icon: Users, label: 'Footfall Estimation', path: '/citizen/footfall' },
+    { icon: MessageSquare, label: 'What If', path: '/what-if' },
+    { icon: TrendingUp, label: 'Predict Data', path: '/government/predict' },
   ];
 
   const menuItems = userRole === 'citizen' ? citizenMenuItems : governmentMenuItems;
@@ -70,7 +74,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole }) => {
         </div>
         <p className="text-sm text-gray-600 mt-2">Welcome, {user?.name}</p>
       </div>
-      
+
       <nav className="p-4 flex-1 overflow-y-auto">
         <ul className="space-y-1">
           {menuItems.map((item) => {
@@ -79,11 +83,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole }) => {
               <li key={item.path}>
                 <button
                   onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 text-left rounded-lg transition-colors ${
-                    isActive(item.path)
-                      ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-600'
-                      : 'text-gray-700 hover:bg-gray-50'
-                  }`}
+                  className={`w-full flex items-center space-x-3 px-4 py-3 text-left rounded-lg transition-colors ${isActive(item.path)
+                    ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-600'
+                    : 'text-gray-700 hover:bg-gray-50'
+                    }`}
                 >
                   <Icon size={20} />
                   <span className="font-medium">{item.label}</span>
@@ -93,7 +96,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole }) => {
           })}
         </ul>
       </nav>
-      
+
       {/* Logout Button */}
       <div className="p-4 border-t">
         <button

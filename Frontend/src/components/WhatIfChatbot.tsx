@@ -72,40 +72,63 @@ export const WhatIfChatbot: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Call AI API for real predictions
-      const response = await fetch('http://localhost:8000/predict', {
+      // Get Groq API key from localStorage
+      const groqApiKey = localStorage.getItem('GROQ_API_KEY') || '';
+
+      // Call What-If API with Meta Llama (via Django proxy)
+      const response = await fetch('http://localhost:8000/api/settings/what-if', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
           lat: 23.0225,
           lon: 72.5714,
           scenario: currentInput,
-          duration_months: 6
+          duration_months: 6,
+          use_llama: true, // Use Meta Llama for What-If scenarios
+          groq_api_key: groqApiKey // Pass API key if available
         }),
       });
 
       if (response.ok) {
         const aiResult = await response.json();
-        const results = {
-          aqi: Math.round(aiResult.annotated_aqi),
-          traffic: Math.abs(aiResult.details.traffic_change_percent),
-          healthcare: 68 + Math.round(aiResult.impact_percentage * 0.3),
-          schools: 82 + Math.round(aiResult.impact_percentage * 0.2),
-          urbanDevelopment: 71 + Math.round(aiResult.impact_percentage * 0.4)
-        };
+
+        // Format detailed text response
+        const detailedResponse = `${aiResult.details.reasoning}
+
+📊 **Impact Analysis:**
+
+🌫️ **Air Quality (AQI):**
+   • Baseline AQI: ${Math.round(aiResult.baseline_aqi)}
+   • Predicted AQI: ${Math.round(aiResult.annotated_aqi)}
+   • Change: ${aiResult.impact_percentage > 0 ? '+' : ''}${aiResult.impact_percentage.toFixed(1)}%
+
+🚗 **Traffic Congestion:**
+   • Traffic Impact: ${aiResult.details.traffic_change_percent}%
+   • Traffic-AQI Correlation: ${aiResult.details.traffic_aqi_shift ? aiResult.details.traffic_aqi_shift.toFixed(2) : 'N/A'}
+
+🏥 **Healthcare Impact:**
+   • Healthcare Load Change: ${aiResult.details.healthcare_change || 68}%
+
+🎓 **Education Impact:**
+   • School Performance Change: ${aiResult.details.schools_change || 82}%
+
+🏗️ **Urban Development:**
+   • Development Index Change: ${aiResult.details.urban_dev_change || 71}%
+
+${aiResult.details.ai_model_data ? '🤖 **AI Model Data Used:** Traffic and AQI prediction models from trained datasets' : ''}`;
 
         const botMessage: ChatMessage = {
           id: (Date.now() + 1).toString(),
           type: 'bot',
-          content: `AI Analysis: ${aiResult.details.reasoning}\n\nProjected impacts for "${currentInput}":`,
+          content: detailedResponse,
           timestamp: new Date(),
-          results,
         };
 
         setMessages(prev => [...prev, botMessage]);
-        
+
         // Store AI response for sharing
         try {
           await fetch('http://localhost:8000/api/ai-responses/store/', {
@@ -131,12 +154,27 @@ export const WhatIfChatbot: React.FC = () => {
       console.error('AI API Error:', error);
       // Fallback to mock data
       const results = simulateScenario(currentInput);
+      const fallbackResponse = `Based on your scenario "${currentInput}", here's the analysis:
+
+📊 **Impact Analysis:**
+
+🌫️ **Air Quality:** AQI ${results.aqi} (${results.aqi <= 50 ? 'Good' : results.aqi <= 100 ? 'Moderate' : 'Unhealthy'})
+
+🚗 **Traffic:** ${results.traffic}% congestion level
+
+🏥 **Healthcare:** ${results.healthcare}% load
+
+🎓 **Education:** ${results.schools}% performance index
+
+🏗️ **Urban Development:** ${results.urbanDevelopment}% development index
+
+⚠️ Note: AI server unavailable, showing estimated values.`;
+
       const botMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         type: 'bot',
-        content: `Based on your scenario "${currentInput}", here are the projected impacts on Ahmedabad city metrics:`,
+        content: fallbackResponse,
         timestamp: new Date(),
-        results,
       };
 
       setMessages(prev => [...prev, botMessage]);
@@ -180,51 +218,20 @@ export const WhatIfChatbot: React.FC = () => {
               className={`flex gap-3 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div className={`flex gap-3 max-w-3xl ${message.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  message.type === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
-                }`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${message.type === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+                  }`}>
                   {message.type === 'user' ? <User size={16} /> : <Bot size={16} />}
                 </div>
-                <div className={`rounded-lg p-3 ${
-                  message.type === 'user' 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-gray-100 text-gray-900'
-                }`}>
-                  <p className="text-sm">{message.content}</p>
-                  
-                  {message.results && (
-                    <div className="mt-4 grid grid-cols-2 gap-3">
-                      <div className="bg-white rounded-lg p-3 text-center">
-                        <Activity className={`w-6 h-6 mx-auto mb-1 ${getColorForValue(message.results.aqi, 'aqi')}`} />
-                        <p className="text-xs text-gray-600">AQI</p>
-                        <p className={`font-bold ${getColorForValue(message.results.aqi, 'aqi')}`}>
-                          {message.results.aqi}
-                        </p>
-                      </div>
-                      <div className="bg-white rounded-lg p-3 text-center">
-                        <Car className={`w-6 h-6 mx-auto mb-1 ${getColorForValue(message.results.traffic, 'traffic')}`} />
-                        <p className="text-xs text-gray-600">Traffic</p>
-                        <p className={`font-bold ${getColorForValue(message.results.traffic, 'traffic')}`}>
-                          {message.results.traffic}%
-                        </p>
-                      </div>
-                      <div className="bg-white rounded-lg p-3 text-center">
-                        <Stethoscope className="w-6 h-6 mx-auto mb-1 text-blue-600" />
-                        <p className="text-xs text-gray-600">Healthcare</p>
-                        <p className="font-bold text-blue-600">{message.results.healthcare}%</p>
-                      </div>
-                      <div className="bg-white rounded-lg p-3 text-center">
-                        <GraduationCap className="w-6 h-6 mx-auto mb-1 text-green-600" />
-                        <p className="text-xs text-gray-600">Schools</p>
-                        <p className="font-bold text-green-600">{message.results.schools}%</p>
-                      </div>
-                    </div>
-                  )}
+                <div className={`rounded-lg p-3 ${message.type === 'user'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 text-gray-900'
+                  }`}>
+                  <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                 </div>
               </div>
             </div>
           ))}
-          
+
           {isLoading && (
             <div className="flex gap-3">
               <div className="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center">

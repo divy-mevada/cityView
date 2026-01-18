@@ -1,0 +1,32 @@
+{
+  "request": {
+    "lat": 22.995323192579036,
+    "lon": 72.50754196775466,
+    "scenario": "Generate prediction for location (22.9953, 72.5075) over 3 months for citizen dashboard",
+    "duration_months": 3
+  },
+  "response": {
+    "annotated_aqi": 120.2,
+    "baseline_aqi": 120.2,
+    "impact_percentage": 0.0,
+    "details": {
+      "traffic_change_percent": 0,
+      "healthcare_index": 40,
+      "schools_index": 50,
+      "urban_dev_index": 30,
+      "reasoning": "The predicted AQI of 120.20169166589619 in Ahmedabad is likely to have moderate negative impacts on the health and quality of life for citizens, particularly those with pre-existing respiratory conditions. The lack of traffic change suggests that existing transportation infrastructure is not being optimized to reduce pollution. This scenario may lead to increased healthcare costs and decreased productivity due to air quality-related illnesses.",
+      "technical_details": {
+        "traffic_prediction": {},
+        "base_traffic": 0.5,
+        "new_traffic": 0.5,
+        "aqi_prediction": {},
+        "baseline_aqi": 120.20169166589619,
+        "traffic_aqi_shift": 0.0,
+        "final_aqi": 120.2,
+        "forecast_horizon_months": 6
+      }
+    }
+  },
+  "user": "AnonymousUser",
+  "timestamp": "2026-01-18T13:11:49.685448"
+}

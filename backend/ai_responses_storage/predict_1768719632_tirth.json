@@ -1,0 +1,44 @@
+{
+  "request": {
+    "lat": 23.03,
+    "lon": 72.58,
+    "scenario": "What if we build a new metro line in Vastrapur?",
+    "duration_months": 6
+  },
+  "response": {
+    "annotated_aqi": 168.72,
+    "baseline_aqi": 175.2,
+    "impact_percentage": -3.7,
+    "details": {
+      "traffic_change_percent": -20,
+      "healthcare_index": 85,
+      "schools_index": 70,
+      "urban_dev_index": 90,
+      "reasoning": "The introduction of a new metro line in Vastrapur, Ahmedabad, is expected to significantly reduce traffic congestion, given the technical baseline of a -20% traffic change. This reduction in traffic will likely lead to a decrease in air pollution, improving the overall air quality index (AQI) from 175.2016916658962. As a result, the quality of life for residents, particularly in terms of healthcare and access to services, is anticipated to improve.",
+      "technical_details": {
+        "traffic_prediction": {
+          "action": "new_project",
+          "magnitude_percent": 10,
+          "location": "Vastrapur Corridor",
+          "duration_months": 60,
+          "traffic_impact": -20
+        },
+        "base_traffic": 0.5,
+        "new_traffic": 0.4,
+        "aqi_prediction": {
+          "construction_type": "unknown",
+          "duration_months": 0,
+          "construction_impact_score": 0.0,
+          "operational_impact_score": 0.0,
+          "reasoning": "Failed to parse scenario."
+        },
+        "baseline_aqi": 175.2016916658962,
+        "traffic_aqi_shift": -6.481385873828519,
+        "final_aqi": 168.72,
+        "forecast_horizon_months": 6
+      }
+    }
+  },
+  "user": "tirth",
+  "timestamp": "2026-01-18T12:30:32.014309"
+}

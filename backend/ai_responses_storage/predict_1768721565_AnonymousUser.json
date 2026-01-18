@@ -1,0 +1,44 @@
+{
+  "request": {
+    "lat": 23.00733222434569,
+    "lon": 72.49174912109123,
+    "scenario": "Generate prediction for location (23.0073, 72.4917) over 5 months for citizen dashboard",
+    "duration_months": 5
+  },
+  "response": {
+    "annotated_aqi": 179.61,
+    "baseline_aqi": 173.2,
+    "impact_percentage": 3.7,
+    "details": {
+      "traffic_change_percent": 20,
+      "healthcare_index": 22,
+      "schools_index": 18,
+      "urban_dev_index": 40,
+      "reasoning": "The high AQI of 173.2016916658962 at location (23.0073, 72.4917) in Ahmedabad indicates severe air pollution, which can lead to respiratory problems and other health issues for citizens. A 20% increase in traffic change will further exacerbate air pollution and congestion, negatively impacting the overall quality of life. This scenario will likely strain healthcare resources and affect urban development plans.",
+      "technical_details": {
+        "traffic_prediction": {
+          "action": "infrastructure_development",
+          "magnitude_percent": 20,
+          "location": "SG Highway Corridor, Ahmedabad (Near Sola/Thaltej)",
+          "duration_months": 5,
+          "traffic_impact": 20
+        },
+        "base_traffic": 0.5,
+        "new_traffic": 0.6,
+        "aqi_prediction": {
+          "construction_type": "unknown",
+          "duration_months": 0,
+          "construction_impact_score": 0.0,
+          "operational_impact_score": 0.0,
+          "reasoning": "Failed to parse scenario."
+        },
+        "baseline_aqi": 173.2016916658962,
+        "traffic_aqi_shift": 6.407398165009037,
+        "final_aqi": 179.61,
+        "forecast_horizon_months": 6
+      }
+    }
+  },
+  "user": "AnonymousUser",
+  "timestamp": "2026-01-18T13:02:45.203441"
+}

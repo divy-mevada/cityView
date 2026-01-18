@@ -1,6 +1,6 @@
 export interface User {
   id: string;
-  phone: string;
+  username: string;
   role: 'citizen' | 'government';
   name?: string;
 }

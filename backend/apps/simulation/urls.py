@@ -9,4 +9,5 @@ app_name = 'simulation'
 urlpatterns = [
     path('run/', views.run, name='run'),
     path('explain/', views.explain, name='explain'),
+    path('', views.predict, name='predict'),
 ]

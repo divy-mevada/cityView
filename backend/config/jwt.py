@@ -19,7 +19,7 @@ def get_tokens_for_user(user):
     
     # Add custom claims to token
     refresh['user_id'] = user.get('id', '')
-    refresh['email'] = user.get('email', '')
+    refresh['username'] = user.get('username', '')
     refresh['role'] = user.get('role', 'citizen')
     
     return {

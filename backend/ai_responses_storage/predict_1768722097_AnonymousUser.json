@@ -1,0 +1,38 @@
+{
+  "request": {
+    "lat": 22.995323192579036,
+    "lon": 72.50754196775466,
+    "scenario": "Generate prediction for location (22.9953, 72.5075) over 5 months for citizen dashboard",
+    "duration_months": 5
+  },
+  "response": {
+    "annotated_aqi": 124.2,
+    "baseline_aqi": 120.2,
+    "impact_percentage": 3.33,
+    "details": {
+      "traffic_change_percent": 18,
+      "healthcare_index": 42,
+      "schools_index": 38,
+      "urban_dev_index": 60,
+      "reasoning": "The predicted AQI of 120.20169166589619 at location (22.9953, 72.5075) over 5 months indicates moderate to poor air quality, which can have adverse effects on the health of citizens, particularly children, the elderly, and those with pre-existing conditions. The 18% traffic change may lead to increased congestion, further exacerbating air pollution. This scenario may require targeted interventions to mitigate the negative impacts on healthcare, schools, and urban development.",
+      "technical_details": {
+        "traffic_prediction": {
+          "action": "new_project",
+          "magnitude_percent": 30,
+          "location": "22.9953, 72.5075",
+          "duration_months": 5,
+          "traffic_impact": 18
+        },
+        "base_traffic": 0.5,
+        "new_traffic": 0.59,
+        "aqi_prediction": {},
+        "baseline_aqi": 120.20169166589619,
+        "traffic_aqi_shift": 4.002051493163481,
+        "final_aqi": 124.2,
+        "forecast_horizon_months": 6
+      }
+    }
+  },
+  "user": "AnonymousUser",
+  "timestamp": "2026-01-18T13:11:37.776725"
+}

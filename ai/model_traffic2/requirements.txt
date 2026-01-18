@@ -1,30 +1,6 @@
-# ---------- Core ----------
-python-dateutil
-pytz
-numpy
-pandas
-
-# ---------- AQI Model ----------
-requests
-google-generativeai
-prophet
-cmdstanpy
-
-# ---------- Spatial & Maps ----------
-geopy
-osmnx
-networkx
-shapely
-pyproj
-
-# ---------- Machine Learning ----------
-scikit-learn
-joblib
-
-# ---------- Visualization (optional, but prophet expects it) ----------
-matplotlib
-plotly
-
-# ---------- Backend-ready (for next step) ----------
-fastapi
-uvicorn
+# Minimal requirements for model_traffic2
+google-generativeai>=0.8.0
+requests>=2.32.0
+numpy>=1.26.0
+pandas>=2.2.0
+joblib>=1.4.0

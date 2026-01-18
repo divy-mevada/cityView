@@ -26,9 +26,25 @@ def calculate_integrated_scenario(lat, lon, user_prompt):
     result = {}
     
     if not GEMINI_API_KEY:
-        return {"error": "GEMINI_API_KEY_MISSING"}
+        print("WARNING: GEMINI_API_KEY not found. Using fallback logic.")
+        # Return basic fallback result instead of error
+        return {
+            "error": "GEMINI_API_KEY_MISSING",
+            "baseline_aqi": 150.0,
+            "final_aqi": 150.0,
+            "traffic_prediction": {"traffic_impact": 0, "action": "unknown"},
+            "aqi_prediction": {"reasoning": "API key missing, using defaults"},
+            "base_traffic": 0.5,
+            "new_traffic": 0.5,
+            "traffic_aqi_shift": 0.0,
+            "forecast_horizon_months": 6
+        }
 
-    client = GeminiClient(GEMINI_API_KEY)
+    try:
+        client = GeminiClient(GEMINI_API_KEY)
+    except Exception as e:
+        print(f"Error initializing Gemini client: {e}")
+        return {"error": f"GEMINI_CLIENT_ERROR: {str(e)}"}
 
     # 1. Analyze with Traffic Model
     traffic_data = parse_traffic_scenario(client, user_prompt)
@@ -65,8 +81,12 @@ def calculate_integrated_scenario(lat, lon, user_prompt):
 
     # 4. Integrate Traffic Influence into AQI
     try:
-        beta = joblib.load('model_traffic2/traffic_to_aqi_beta.pkl')
-    except:
+        # Use absolute path based on this file's location
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        beta_path = os.path.join(base_dir, 'model_traffic2', 'traffic_to_aqi_beta.pkl')
+        beta = joblib.load(beta_path)
+    except Exception as e:
+        print(f"Warning: Could not load beta coefficient: {e}")
         beta = 0.5 # Default strict connection
     
     traffic_induced_aqi_change = (new_traffic_signal - base_traffic_signal) * beta * current_aqi

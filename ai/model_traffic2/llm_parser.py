@@ -64,13 +64,20 @@ def _heuristic_fallback(sentence):
     if "bridge" in sentence:
         data["action"] = "add_infrastructure"
         data["magnitude_percent"] = 15.0 # Implicit 15% reduction
+        data["traffic_impact"] = -15.0
     elif "metro" in sentence:
         data["action"] = "add_infrastructure" 
         data["magnitude_percent"] = 25.0
+        data["traffic_impact"] = -25.0
     elif "reduce" in sentence or "decrease" in sentence:
         data["action"] = "reduce"
-        # magnitude is positive in the text (reduce by 20%), but logic handles sign later
+        # magnitude is positive in the text (reduce by 20%), impact should be -20
+        data["traffic_impact"] = -data["magnitude_percent"]
     elif "increase" in sentence:
         data["action"] = "increase"
+        data["traffic_impact"] = data["magnitude_percent"]
+    else:
+        # Default case - no specific action found
+        data["traffic_impact"] = 0.0
 
     return data

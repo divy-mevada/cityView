@@ -12,8 +12,8 @@ class GeminiClient:
         genai.configure(api_key=api_key)
         
         # Use a model that supports JSON mode if possible, or just robust prompting
-        # gemini-2.0-flash is available and fast
-        self.model = genai.GenerativeModel('gemini-2.0-flash')
+        # gemini-flash-latest is confirmed available in this environment
+        self.model = genai.GenerativeModel('gemini-flash-latest')
 
     def chat(self, system, user):
         """

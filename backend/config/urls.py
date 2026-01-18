@@ -1,8 +1,6 @@
-"""
-URL configuration for Ahmedabad Urban Intelligence Platform.
-"""
 from django.contrib import admin
 from django.urls import path, include
+from apps.simulation import views as simulation_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -18,6 +16,8 @@ urlpatterns = [
     path('api/forecast/', include('apps.forecasting.urls')),
     path('api/demand/', include('apps.demand.urls')),
     path('api/simulation/', include('apps.simulation.urls')),
+    path('api/predict/', simulation_views.predict, name='predict_api'),
     path('api/scenarios/', include('apps.scenarios.urls')),
     path('api/ai-responses/', include('apps.ai_responses.urls')),
+    path('api/settings/', include('apps.settings_app.urls')),
 ]

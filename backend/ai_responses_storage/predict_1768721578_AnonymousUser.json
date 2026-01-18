@@ -1,0 +1,44 @@
+{
+  "request": {
+    "lat": 23.00733222434569,
+    "lon": 72.49174912109123,
+    "scenario": "Generate prediction for location (23.0073, 72.4917) over 3 months for citizen dashboard",
+    "duration_months": 3
+  },
+  "response": {
+    "annotated_aqi": 175.44,
+    "baseline_aqi": 173.2,
+    "impact_percentage": 1.29,
+    "details": {
+      "traffic_change_percent": 7,
+      "healthcare_index": 32,
+      "schools_index": 41,
+      "urban_dev_index": 28,
+      "reasoning": "The predicted AQI of 173.2016916658962 indicates a significant level of air pollution, posing health risks to citizens. A 7% increase in traffic change may exacerbate this issue, affecting not only the health but also the overall quality of life in Ahmedabad. This scenario may have long-term implications for urban development and planning.",
+      "technical_details": {
+        "traffic_prediction": {
+          "action": "routine_maintenance",
+          "magnitude_percent": 5,
+          "location": "23.0073, 72.4917",
+          "duration_months": 3,
+          "traffic_impact": 7
+        },
+        "base_traffic": 0.5,
+        "new_traffic": 0.535,
+        "aqi_prediction": {
+          "construction_type": "unknown",
+          "duration_months": 0,
+          "construction_impact_score": 0.0,
+          "operational_impact_score": 0.0,
+          "reasoning": "Failed to parse scenario."
+        },
+        "baseline_aqi": 173.2016916658962,
+        "traffic_aqi_shift": 2.2425893577531655,
+        "final_aqi": 175.44,
+        "forecast_horizon_months": 6
+      }
+    }
+  },
+  "user": "AnonymousUser",
+  "timestamp": "2026-01-18T13:02:58.754891"
+}

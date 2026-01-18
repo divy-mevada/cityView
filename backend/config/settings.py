@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'apps.simulation',
     'apps.scenarios',
     'apps.demand',
+    'apps.settings_app',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,16 @@
+@echo off
+echo Setting up AI module...
+
+cd ai
+
+echo Creating virtual environment for AI...
+python -m venv ai_venv
+
+echo Activating virtual environment...
+call ai_venv\Scripts\activate
+
+echo Installing AI dependencies...
+pip install -r requirements.txt
+
+echo Running integrated AI runner...
+python integrated_runner.py

@@ -1,0 +1,44 @@
+{
+  "request": {
+    "lat": 23.00733222434569,
+    "lon": 72.49174912109123,
+    "scenario": "Generate prediction for location (23.0073, 72.4917) over 1 month for citizen dashboard",
+    "duration_months": 1
+  },
+  "response": {
+    "annotated_aqi": 178.01,
+    "baseline_aqi": 173.2,
+    "impact_percentage": 2.77,
+    "details": {
+      "traffic_change_percent": 15,
+      "healthcare_index": 32,
+      "schools_index": 41,
+      "urban_dev_index": 28,
+      "reasoning": "The predicted AQI of 173.2016916658962 at location (23.0073, 72.4917) in Ahmedabad indicates poor air quality, which can lead to respiratory issues and other health problems for citizens. A 15% increase in traffic change may exacerbate air pollution and contribute to decreased quality of life. This scenario may necessitate targeted urban development and healthcare interventions to mitigate its negative impacts.",
+      "technical_details": {
+        "traffic_prediction": {
+          "action": "scheduled_maintenance",
+          "magnitude_percent": 15,
+          "location": "23.0073, 72.4917",
+          "duration_months": 1,
+          "traffic_impact": 15
+        },
+        "base_traffic": 0.5,
+        "new_traffic": 0.575,
+        "aqi_prediction": {
+          "construction_type": "unknown",
+          "duration_months": 0,
+          "construction_impact_score": 0.0,
+          "operational_impact_score": 0.0,
+          "reasoning": "Failed to parse scenario."
+        },
+        "baseline_aqi": 173.2016916658962,
+        "traffic_aqi_shift": 4.805548623756777,
+        "final_aqi": 178.01,
+        "forecast_horizon_months": 6
+      }
+    }
+  },
+  "user": "AnonymousUser",
+  "timestamp": "2026-01-18T13:03:11.921169"
+}

@@ -1,0 +1,17 @@
+# Core dependencies for AI server
+fastapi==0.115.0
+uvicorn==0.32.0
+pydantic==2.9.0
+requests==2.32.3
+python-dotenv==1.0.0
+
+# AI/ML libraries
+google-generativeai==0.8.3
+
+# Data handling - using latest versions compatible with Python 3.13
+numpy>=1.26.0
+pandas>=2.2.0
+joblib>=1.4.0
+
+# Prophet for forecasting
+prophet>=1.1.5

@@ -3,6 +3,7 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { mapService } from '../services/mapService';
 import type { AQIData, TrafficData } from '../types';
+import { Lightbulb, MapPin, Wind, AlertTriangle, Car } from 'lucide-react';
 
 interface MapComponentProps {
   layers: string[];
@@ -27,8 +28,14 @@ export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = 
   useEffect(() => {
     if (mapRef.current && !mapInstanceRef.current) {
       const tomtomApiKey = import.meta.env.VITE_TOMTOM_API_KEY;
-      const aqicnToken = import.meta.env.VITE_AQICN_API_KEY;
-      
+
+      // Check for API keys
+      if (!tomtomApiKey || tomtomApiKey === 'undefined') {
+        console.error('TomTom API Key is missing');
+        mapRef.current.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100%;color:red;">Error: TomTom API Key missing. Please check .env file.</div>';
+        return;
+      }
+
       // Initialize MapLibre GL map with TomTom tiles
       mapInstanceRef.current = new maplibregl.Map({
         container: mapRef.current,
@@ -39,49 +46,20 @@ export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = 
               type: 'raster',
               tiles: [`https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=${tomtomApiKey}`],
               tileSize: 256
-            },
-            'aqi-tiles': {
-              type: 'raster',
-              tiles: [`https://tiles.aqicn.org/tiles/usepa-aqi/{z}/{x}/{y}.png?token=${aqicnToken}`],
-              tileSize: 256
-            },
-            'traffic-tiles': {
-              type: 'raster',
-              tiles: [`https://api.tomtom.com/traffic/map/4/tile/flow/absolute/{z}/{x}/{y}.png?key=${tomtomApiKey}`],
-              tileSize: 256
             }
           },
           layers: [
             {
               id: 'tomtom-tiles',
               type: 'raster',
-              source: 'tomtom-map'
+              source: 'tomtom-map',
+              minzoom: 0,
+              maxzoom: 22
             }
           ]
         },
         center: [72.5714, 23.0225], // [lng, lat] for Ahmedabad
         zoom: 11
-      });
-
-      // Add layers based on props
-      mapInstanceRef.current.on('load', () => {
-        if (layers.includes('aqi')) {
-          mapInstanceRef.current!.addLayer({
-            id: 'aqi-layer',
-            type: 'raster',
-            source: 'aqi-tiles',
-            paint: { 'raster-opacity': 0.7 }
-          });
-        }
-        
-        if (layers.includes('traffic')) {
-          mapInstanceRef.current!.addLayer({
-            id: 'traffic-layer',
-            type: 'raster',
-            source: 'traffic-tiles',
-            paint: { 'raster-opacity': 0.6 }
-          });
-        }
       });
 
       // Add AQI monitoring stations for Ahmedabad
@@ -98,7 +76,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = 
           const aqiData = await mapService.getAQIData(station.lat, station.lng);
           const aqi = aqiData.data.aqi;
           const color = mapService.getAQIColor(aqi);
-          
+
           new maplibregl.Marker({ color })
             .setLngLat([station.lng, station.lat])
             .setPopup(new maplibregl.Popup().setHTML(`
@@ -117,38 +95,38 @@ export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = 
       // Add click event listener for location selection
       mapInstanceRef.current.on('click', async (e) => {
         const { lng, lat } = e.lngLat;
-        
+
         // Call parent callback if provided
         if (onLocationSelect) {
           onLocationSelect(lat, lng);
         }
-        
+
         // Remove previous marker if exists
         if (currentMarkerRef.current) {
           currentMarkerRef.current.remove();
         }
-        
+
         // Set loading state
         setSelectedLocation({ lat, lng, loading: true });
-        
+
         // Add temporary marker for selected location
         currentMarkerRef.current = new maplibregl.Marker({ color: '#ff0000' })
           .setLngLat([lng, lat])
           .addTo(mapInstanceRef.current!);
-        
+
         try {
           // Fetch AQI and traffic data for clicked location
           const locationData = await mapService.getLocationData(lat, lng);
-          
+
           const aqi = locationData.aqi.data.aqi;
           const color = mapService.getAQIColor(aqi);
-          
+
           // Update marker color based on AQI
           currentMarkerRef.current.remove();
           currentMarkerRef.current = new maplibregl.Marker({ color })
             .setLngLat([lng, lat])
             .addTo(mapInstanceRef.current!);
-          
+
           // Update state with all data
           setSelectedLocation({
             lat,
@@ -157,7 +135,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = 
             traffic: locationData.traffic,
             loading: false
           });
-          
+
         } catch (error) {
           console.error('Error fetching location data:', error);
           setSelectedLocation({ lat, lng, loading: false });
@@ -178,7 +156,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = 
 
   const getTrafficStatus = (traffic: TrafficData) => {
     if (!traffic.currentSpeed || !traffic.freeFlowSpeed) return { status: 'No Data', color: '#gray' };
-    
+
     const ratio = traffic.currentSpeed / traffic.freeFlowSpeed;
     if (ratio >= 0.8) return { status: 'Free Flow', color: '#00e400' };
     if (ratio >= 0.6) return { status: 'Light Traffic', color: '#ffff00' };
@@ -201,50 +179,42 @@ export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = 
       {/* Map Container */}
       <div className="relative flex-1">
         <div ref={mapRef} className={`w-full h-full rounded-lg ${className}`} />
-        
+
         {/* Layer controls */}
         <div className="absolute top-4 left-4 bg-white p-2 rounded-lg shadow-lg z-10">
-          <h5 className="text-xs font-semibold mb-2">Map Layers</h5>
-          <div className="space-y-1">
-            {layers.includes('aqi') && (
-              <div className="flex items-center text-xs">
-                <div className="w-3 h-3 bg-green-500 rounded mr-2 opacity-60"></div>
-                AQI Overlay
-              </div>
-            )}
-            {layers.includes('traffic') && (
-              <div className="flex items-center text-xs">
-                <div className="w-3 h-3 bg-red-500 rounded mr-2 opacity-60"></div>
-                Traffic Flow
-              </div>
-            )}
-          </div>
-          
+          <h5 className="text-xs font-semibold mb-2">Interactive Map</h5>
+
           {/* Instructions */}
-          <div className="mt-3 pt-2 border-t border-gray-200">
-            <p className="text-xs text-gray-600">💡 Click anywhere to get AQI & traffic data</p>
+          <div className="pt-2 border-t border-gray-200">
+            <p className="text-xs text-gray-600 flex items-center gap-1">
+              <Lightbulb className="w-3 h-3" />
+              Click anywhere to get AQI & traffic data
+            </p>
           </div>
         </div>
       </div>
-      
+
       {/* Location Data Card */}
       {selectedLocation && (
         <div className="bg-white border-t border-gray-200 p-4">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">📍 Location Data</h3>
-              <button 
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <MapPin className="w-5 h-5" />
+                Location Data
+              </h3>
+              <button
                 onClick={() => setSelectedLocation(null)}
                 className="text-sm text-gray-500 hover:text-gray-700 px-3 py-1 border rounded"
               >
                 Clear
               </button>
             </div>
-            
+
             <p className="text-sm text-gray-600 mb-4">
               Coordinates: {selectedLocation.lat.toFixed(4)}, {selectedLocation.lng.toFixed(4)}
             </p>
-            
+
             {selectedLocation.loading ? (
               <div className="flex items-center justify-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
@@ -254,14 +224,15 @@ export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* AQI Card */}
                 <div className="bg-gradient-to-br from-green-50 to-blue-50 p-4 rounded-lg border">
-                  <h4 className="font-semibold text-lg mb-3 flex items-center">
-                    🌬️ Air Quality Index
+                  <h4 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                    <Wind className="w-5 h-5" />
+                    Air Quality Index
                   </h4>
                   {(() => {
                     const aqi = selectedLocation.aqi.data.aqi;
                     const level = mapService.getAQILevel(aqi);
                     const color = mapService.getAQIColor(aqi);
-                    
+
                     return (
                       <>
                         <div className="flex items-center mb-3">
@@ -271,7 +242,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = 
                             <div className="text-sm text-gray-600">{getHealthRecommendation(aqi)}</div>
                           </div>
                         </div>
-                        
+
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           <div><strong>PM2.5:</strong> {selectedLocation.aqi.data.iaqi.pm25?.v || 'N/A'} μg/m³</div>
                           <div><strong>PM10:</strong> {selectedLocation.aqi.data.iaqi.pm10?.v || 'N/A'} μg/m³</div>
@@ -280,27 +251,28 @@ export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = 
                           <div><strong>SO₂:</strong> {selectedLocation.aqi.data.iaqi.so2?.v || 'N/A'} μg/m³</div>
                           <div><strong>CO:</strong> {selectedLocation.aqi.data.iaqi.co?.v || 'N/A'} mg/m³</div>
                         </div>
-                        
+
                         <div className="mt-3 p-2 bg-white bg-opacity-50 rounded text-xs">
-                          <strong>Station:</strong> {selectedLocation.aqi.data.city.name}<br/>
+                          <strong>Station:</strong> {selectedLocation.aqi.data.city.name}<br />
                           <strong>Updated:</strong> {new Date(selectedLocation.aqi.data.time.s).toLocaleString()}
                         </div>
                       </>
                     );
                   })()}
                 </div>
-                
+
                 {/* Traffic Card */}
                 <div className="bg-gradient-to-br from-orange-50 to-red-50 p-4 rounded-lg border">
-                  <h4 className="font-semibold text-lg mb-3 flex items-center">
-                    🚗 Live Traffic Status
+                  <h4 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                    <Car className="w-5 h-5" />
+                    Live Traffic Status
                   </h4>
                   {(() => {
                     const trafficStatus = getTrafficStatus(selectedLocation.traffic);
                     return (
                       <>
                         <div className="flex items-center mb-3">
-                          <div 
+                          <div
                             className="w-4 h-4 rounded-full mr-3"
                             style={{ backgroundColor: trafficStatus.color }}
                           ></div>
@@ -308,7 +280,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = 
                             {trafficStatus.status}
                           </span>
                         </div>
-                        
+
                         <div className="space-y-2 text-sm">
                           <div className="flex justify-between">
                             <span>Current Speed:</span>
@@ -327,8 +299,9 @@ export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = 
                             <span className="font-semibold">{(selectedLocation.traffic.confidence * 100 || 0).toFixed(0)}%</span>
                           </div>
                           {selectedLocation.traffic.roadClosure && (
-                            <div className="mt-2 p-2 bg-red-100 text-red-800 rounded text-sm font-medium">
-                              ⚠️ Road Closure Detected
+                            <div className="mt-2 p-2 bg-red-100 text-red-800 rounded text-sm font-medium flex items-center gap-2">
+                              <AlertTriangle className="w-4 h-4" />
+                              Road Closure Detected
                             </div>
                           )}
                         </div>

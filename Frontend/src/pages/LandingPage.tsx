@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useEffect } from 'react';
 import { Building2, Lock, Users, Shield, Globe, BarChart3, CheckCircle } from "lucide-react";
 import Threads from "../components/Threads";
 
@@ -8,9 +9,11 @@ export const LandingPage = () => {
   const { user } = useAuth();
 
   // Redirect if already logged in
-  if (user) {
-    navigate(user.role === "government" ? "/government" : "/citizen");
-  }
+  useEffect(() => {
+    if (user) {
+      navigate(user.role === "government" ? "/government" : "/citizen");
+    }
+  }, [user, navigate]);
 
   return (
     <div className="min-h-screen text-gray-900" style={{ backgroundColor: '#D1E7F0' }}>
@@ -54,7 +57,7 @@ export const LandingPage = () => {
               enableMouseInteraction={false}
             />
           </div>
-          
+
           <div className="text-center max-w-4xl relative z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 border border-blue-200 text-blue-700 text-xs font-bold uppercase tracking-wider mb-6">
               <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
@@ -65,8 +68,8 @@ export const LandingPage = () => {
               <span className="text-blue-600">Real-Time</span> Intelligence
             </h1>
             <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10">
-              A smart city planning platform that shows current living conditions, allows what-ifs simulations 
-                  and predicts future city health, helping citizens and planners make informed descisions.
+              A smart city planning platform that shows current living conditions, allows what-ifs simulations
+              and predicts future city health, helping citizens and planners make informed descisions.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <button
@@ -120,7 +123,7 @@ export const LandingPage = () => {
                     <CheckCircle className="w-4 h-4 text-blue-600" />
                     <span>Real-time Health Monitoring</span>
                   </div>
-                  <button 
+                  <button
                     onClick={() => navigate('/login/citizen')}
                     className="mt-6 w-full py-3 bg-blue-600 hover:bg-blue-700 border border-gray-200 text-white rounded-xl font-bold transition-all"
                   >
@@ -152,7 +155,7 @@ export const LandingPage = () => {
                     <Lock className="w-4 h-4 text-blue-600" />
                     <span>Official Resource Deployment</span>
                   </div>
-                  <button 
+                  <button
                     onClick={() => navigate('/login/government')}
                     className="mt-6 w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg transition-all hover:bg-blue-700"
                   >

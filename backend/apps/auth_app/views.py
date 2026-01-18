@@ -1,5 +1,5 @@
 """
-Authentication views for JWT-based login and profile management.
+Authentication views for JWT-based login, registration and profile management.
 Uses mocked user data for Ahmedabad Urban Intelligence Platform.
 """
 from rest_framework import status
@@ -7,67 +7,124 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from config.jwt import get_tokens_for_user
+import uuid
 
-# Mock user database (to be replaced with PostgreSQL later)
+# Mock user database
 MOCK_USERS = {
-    'tirthpatel1356@gmail.com': {
+    'divy': {
         'id': '1',
-        'email': 'tirthpatel1356@gmail.com',
-        'password': '1234',  # In production, use hashed passwords
-        'role': 'citizen',
-        'name': 'Tirth Patel',
-        'phone': '+919876543210'
-    },
-    'tirthpatel3129@gmail.com': {
-        'id': '2',
-        'email': 'tirthpatel3129@gmail.com',
+        'username': 'divy',
         'password': '1234',
         'role': 'government',
-        'name': 'Tirth Patel (Gov)',
-        'phone': '+919876543211'
+        'name': 'Divy Mevada',
+        'email': 'tirthpatel3129@gmail.com'
+    },
+    'tirth': {
+        'id': '2',
+        'username': 'tirth',
+        'password': '1234',
+        'role': 'citizen',
+        'name': 'Tirth Patel',
+        'email': 'tirthpatel1356@gmail.com'
     }
 }
 
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
+def register(request):
+    """
+    User registration endpoint.
+    """
+    username = request.data.get('username')
+    password = request.data.get('password')
+    name = request.data.get('name')
+    email = request.data.get('email')
+    role = request.data.get('role', 'citizen')  # Default to citizen
+    
+    # Validation
+    if not all([username, password, name, email]):
+        return Response(
+            {'error': 'Username, password, name, and email are required'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    # Check if user already exists
+    if username in MOCK_USERS:
+        return Response(
+            {'error': 'Username already exists'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    # Check if email already exists
+    for user in MOCK_USERS.values():
+        if user.get('email') == email:
+            return Response(
+                {'error': 'Email already exists'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    
+    # Validate role
+    if role not in ['citizen', 'government']:
+        return Response(
+            {'error': 'Role must be either "citizen" or "government"'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    # Create new user
+    new_user = {
+        'id': str(len(MOCK_USERS) + 1),
+        'username': username,
+        'password': password,
+        'role': role,
+        'name': name,
+        'email': email
+    }
+    
+    # Add to mock database
+    MOCK_USERS[username] = new_user
+    
+    # Generate JWT tokens
+    tokens = get_tokens_for_user(new_user)
+    
+    # Prepare user data (exclude password)
+    user_data = {
+        'id': new_user['id'],
+        'username': new_user['username'],
+        'role': new_user['role'],
+        'name': new_user['name'],
+        'email': new_user['email']
+    }
+    
+    return Response({
+        'message': 'User registered successfully',
+        'access': tokens['access'],
+        'refresh': tokens['refresh'],
+        'user': user_data
+    }, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
 def login(request):
     """
-    User login endpoint.
-    
-    Request body:
-        {
-            "email": "user@example.com",
-            "password": "password123"
-        }
-    
-    Response:
-        {
-            "access": "jwt-access-token",
-            "refresh": "jwt-refresh-token",
-            "user": {
-                "id": "1",
-                "email": "user@example.com",
-                "role": "citizen",
-                "name": "User Name"
-            }
-        }
+    User login endpoint using username and password.
     """
-    email = request.data.get('email')
+    username = request.data.get('username')
     password = request.data.get('password')
     
-    if not email or not password:
+    if not username or not password:
         return Response(
-            {'error': 'Email and password are required'},
+            {'error': 'Username and password are required'},
             status=status.HTTP_400_BAD_REQUEST
         )
     
     # Check if user exists in mock database
-    user = MOCK_USERS.get(email)
+    user = MOCK_USERS.get(username)
     
     if not user or user['password'] != password:
         return Response(
-            {'error': 'Invalid email or password'},
+            {'error': 'Invalid username or password'},
             status=status.HTTP_401_UNAUTHORIZED
         )
     
@@ -77,10 +134,10 @@ def login(request):
     # Prepare user data (exclude password)
     user_data = {
         'id': user['id'],
-        'email': user['email'],
+        'username': user['username'],
         'role': user['role'],
         'name': user.get('name', ''),
-        'phone': user.get('phone', '')
+        'email': user.get('email', '')
     }
     
     return Response({
@@ -97,27 +154,18 @@ def profile(request):
     Get current user profile.
     
     Requires: Bearer token in Authorization header
-    
-    Response:
-        {
-            "id": "1",
-            "email": "user@example.com",
-            "role": "citizen",
-            "name": "User Name",
-            "phone": "+919876543210"
-        }
     """
-    # Extract user info from token (mocked - in production, decode JWT)
-    # For now, we'll use a simple lookup based on email from token payload
-    # In a real implementation, you'd decode the JWT and get the user_id
+    # For mocked implementation, we'll try to get user from request.user
+    # or fallback to query param for manual testing
+    username = request.query_params.get('username')
     
-    # Mock: Get user by ID from token (simplified)
-    # In production, decode JWT token to get user_id
-    user_id = getattr(request.user, 'id', None) if hasattr(request.user, 'id') else None
-    
-    # For mocked implementation, get user from email in request
-    email = request.query_params.get('email') or 'tirthpatel1356@gmail.com'
-    user = MOCK_USERS.get(email)
+    if not username:
+        # In a real JWT setup, request.user would be populated
+        # but since we are mocking, we can extract from token manually if needed
+        # For now, let's allow passing username or use a default
+        username = 'tirth'
+        
+    user = MOCK_USERS.get(username)
     
     if not user:
         return Response(
@@ -127,10 +175,10 @@ def profile(request):
     
     user_data = {
         'id': user['id'],
-        'email': user['email'],
+        'username': user['username'],
         'role': user['role'],
         'name': user.get('name', ''),
-        'phone': user.get('phone', '')
+        'email': user.get('email', '')
     }
     
     return Response(user_data, status=status.HTTP_200_OK)
