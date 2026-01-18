@@ -123,36 +123,63 @@ You should see:
 
 ---
 
-## 🤖 AI Server Setup (FastAPI - Optional but Recommended)
+## 🤖 AI Server Setup (FastAPI - Required for Predictions)
 
-The AI server runs on **port 8000** (same as Django). **Important:** You need to run this on a different port or stop Django first.
+The AI server runs on **port 8001** (separate from Django on port 8000). **This is required for the prediction feature to work.**
 
-### Option A: Run AI Server on Different Port (Recommended)
+### Quick Start (Windows - Recommended)
 
-Edit `ai/api_server.py` line 84:
-```python
-uvicorn.run(app, host="0.0.0.0", port=8001)  # Changed from 8000 to 8001
+Open a **NEW terminal window** (keep backend and frontend running) and run:
+
+```bash
+run_ai_server.bat
 ```
 
-Then update frontend calls from `localhost:8000/api/predict` to `localhost:8001/api/predict`
+This will automatically:
+- Navigate to the `ai` directory
+- Install required dependencies (fastapi, uvicorn, requests, google-generativeai, joblib)
+- Start the AI server on port 8001
 
-### Option B: Stop Django, Run AI Server
+### Manual Setup
 
-Stop Django (Ctrl+C), then:
+If the batch file doesn't work, follow these steps:
+
+**Step 1: Navigate to AI Directory**
+
+Open a **NEW terminal window** and run:
 
 ```bash
 cd ai
+```
 
-# Install AI dependencies
+**Step 2: Install Dependencies**
+
+```bash
+# Install core FastAPI dependencies
+pip install fastapi uvicorn requests google-generativeai joblib
+
+# Install AI model dependencies
 pip install -r model_ai1/requirements.txt
 pip install -r model_traffic2/requirements.txt
+```
 
-# Install FastAPI and Uvicorn if not already installed
-pip install fastapi uvicorn requests
+**Step 3: Start AI Server**
 
-# Run AI server
+```bash
 python api_server.py
 ```
+
+✅ **AI Server is now running at:** `http://localhost:8001`
+
+You should see:
+```
+INFO:     Started server process
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001
+```
+
+**Note:** The AI server must be running for the prediction feature in the Government Dashboard to work. Keep this terminal window open while using predictions.
 
 ---
 
@@ -184,7 +211,7 @@ Once everything is running:
 |---------|-----|---------|
 | **Frontend** | http://localhost:5173 | Main application UI |
 | **Backend API** | http://localhost:8000/api | Django REST API |
-| **AI Server** | http://localhost:8000 (or 8001) | AI predictions endpoint |
+| **AI Server** | http://localhost:8001 | AI predictions endpoint (required for predictions) |
 | **Django Admin** | http://localhost:8000/admin | Admin panel (if configured) |
 
 ---
@@ -334,10 +361,12 @@ To stop any running server:
 
 - [ ] Backend server running on port 8000
 - [ ] Frontend server running on port 5173
+- [ ] **AI server running on port 8001** (required for predictions)
 - [ ] Can access http://localhost:5173 in browser
 - [ ] Can login with test credentials
 - [ ] Dashboard loads without errors
 - [ ] Map component displays (may need API keys for full functionality)
+- [ ] Prediction feature works (requires AI server on port 8001)
 
 ---
 

@@ -56,7 +56,7 @@ export const weatherService = {
         confidence: data.flowSegmentData?.confidence || Math.random() * 0.5 + 0.5,
         roadClosure: data.flowSegmentData?.roadClosure || false
       };
-    } catch (error) {
+    } catch {
       // Return mock data on error
       return {
         currentSpeed: Math.floor(Math.random() * 60) + 20,

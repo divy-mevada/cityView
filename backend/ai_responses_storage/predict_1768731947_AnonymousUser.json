@@ -1,0 +1,90 @@
+{
+  "request": {
+    "lat": 23.01428433324422,
+    "lon": 72.55766708984157,
+    "scenario": "",
+    "duration_months": 6
+  },
+  "response": {
+    "predictions": {
+      "1_month": {
+        "aqi": 131.69,
+        "confidence": {
+          "score": 70,
+          "label": "MEDIUM"
+        },
+        "baseline_aqi": 131.69,
+        "impact_percentage": 0
+      },
+      "3_month": {
+        "aqi": 129.7,
+        "confidence": {
+          "score": 60,
+          "label": "MEDIUM"
+        },
+        "baseline_aqi": 129.7,
+        "impact_percentage": 0
+      },
+      "5_month": {
+        "aqi": 125.19,
+        "confidence": {
+          "score": 50,
+          "label": "MEDIUM",
+          "explanation": "Moderate confidence due to distance from stations or longer forecast horizon."
+        },
+        "baseline_aqi": 125.19,
+        "impact_percentage": 0
+      },
+      "6_month": {
+        "aqi": 122.93,
+        "confidence": {
+          "score": 50,
+          "label": "MEDIUM",
+          "explanation": "Moderate confidence due to distance from stations or longer forecast horizon."
+        },
+        "baseline_aqi": 122.93,
+        "impact_percentage": 0
+      }
+    },
+    "station_influence": [
+      {
+        "station": "vastrapur",
+        "distance_km": 3.98,
+        "influence_percent": 39.52
+      },
+      {
+        "station": "maninagar",
+        "distance_km": 4.89,
+        "influence_percent": 26.18
+      },
+      {
+        "station": "isanpur",
+        "distance_km": 5.85,
+        "influence_percent": 18.35
+      },
+      {
+        "station": "bopal",
+        "distance_km": 9.61,
+        "influence_percent": 6.78
+      },
+      {
+        "station": "chandkheda",
+        "distance_km": 10.9,
+        "influence_percent": 5.28
+      },
+      {
+        "station": "naroda",
+        "distance_km": 12.69,
+        "influence_percent": 3.89
+      }
+    ],
+    "details": {
+      "reasoning": "Basic AQI forecast using Prophet time-series model. No project scenarios applied.",
+      "traffic_change_percent": 0,
+      "construction_phase": "None",
+      "model_type": "Prophet Time-Series Forecast"
+    }
+  },
+  "user": "AnonymousUser",
+  "timestamp": "2026-01-18T15:55:47.372893"
+}

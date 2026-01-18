@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Sidebar } from '../components/Sidebar';
 import { useAuth } from '../context/AuthContext';
-import { MapPin, TrendingUp, Clock, LogOut, BarChart3 } from 'lucide-react';
+import { MapPin, TrendingUp, Clock, BarChart3 } from 'lucide-react';
 import { TimelineSelector } from '../components/TimelineSelector';
 import { timelineOptions } from '../services/api';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export const AreaDemandPage: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [selectedTimeline, setSelectedTimeline] = useState('current');
 
   // Determine user role based on current path or user data

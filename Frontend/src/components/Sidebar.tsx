@@ -9,15 +9,11 @@ import {
   Stethoscope,
   GraduationCap,
   Building2,
-  BarChart3,
   MessageSquare,
-  Settings,
   LogOut,
   Users,
   TrendingUp,
-  MapPin,
-  Calendar,
-  Database
+  MapPin
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -61,21 +57,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole }) => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <aside className="w-64 bg-white shadow-lg h-screen fixed left-0 top-0 z-40 flex flex-col">
-      <div className="p-6 border-b">
+    <aside className="sidebar-shell">
+      <div className="p-6 border-b border-slate-100 bg-white/80 backdrop-blur-md">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white">
+          <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center text-white shadow-md">
             <Building2 className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-gray-900">City View</h1>
-            <p className="text-xs text-gray-600 capitalize">{userRole} Portal</p>
+            <h1 className="text-lg font-bold text-slate-900 tracking-tight">City View</h1>
+            <p className="text-xs text-slate-500 capitalize">{userRole} Portal</p>
           </div>
         </div>
-        <p className="text-sm text-gray-600 mt-2">Welcome, {user?.name}</p>
+        <p className="text-sm text-slate-500 mt-2">
+          Welcome, <span className="font-semibold text-slate-800">{user?.name}</span>
+        </p>
       </div>
 
-      <nav className="p-4 flex-1 overflow-y-auto">
+      <nav className="p-4 flex-1 overflow-y-auto bg-gradient-to-b from-white/60 via-slate-50/40 to-slate-100/20">
         <ul className="space-y-1">
           {menuItems.map((item) => {
             const Icon = item.icon;
@@ -83,13 +81,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole }) => {
               <li key={item.path}>
                 <button
                   onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 text-left rounded-lg transition-colors ${isActive(item.path)
-                    ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-600'
-                    : 'text-gray-700 hover:bg-gray-50'
-                    }`}
+                  className={`sidebar-item ${
+                    isActive(item.path)
+                      ? 'sidebar-item-active'
+                      : 'sidebar-item-inactive'
+                  }`}
                 >
-                  <Icon size={20} />
-                  <span className="font-medium">{item.label}</span>
+                  <div className={`flex items-center justify-center w-8 h-8 rounded-lg ${
+                    isActive(item.path)
+                      ? 'bg-white/20'
+                      : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200'
+                  }`}>
+                    <Icon size={18} />
+                  </div>
+                  <span className="font-medium tracking-tight">{item.label}</span>
                 </button>
               </li>
             );
@@ -98,10 +103,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole }) => {
       </nav>
 
       {/* Logout Button */}
-      <div className="p-4 border-t">
+      <div className="p-4 border-t border-slate-100 bg-white/80 backdrop-blur-md">
         <button
           onClick={logout}
-          className="w-full flex items-center space-x-3 px-4 py-3 text-left rounded-lg transition-colors text-red-600 hover:bg-red-50"
+          className="w-full flex items-center space-x-3 px-4 py-3 text-left rounded-xl transition-colors text-red-600 hover:bg-red-50 hover:-translate-y-0.5 hover:shadow-sm"
         >
           <LogOut size={20} />
           <span className="font-medium">Logout</span>

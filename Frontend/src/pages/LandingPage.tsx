@@ -16,11 +16,11 @@ export const LandingPage = () => {
   }, [user, navigate]);
 
   return (
-    <div className="min-h-screen text-gray-900" style={{ backgroundColor: '#D1E7F0' }}>
+    <div className="min-h-screen text-gray-900 bg-gradient-to-br from-[#E0F2FE] via-[#F9FAFB] to-[#DBEAFE]">
       {/* Header */}
-      <header className="fixed top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-200 px-6 lg:px-20 py-4 flex items-center justify-between">
+      <header className="fixed top-0 z-50 w-full bg-white/80 backdrop-blur-xl border-b border-slate-200 px-6 lg:px-20 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white">
+          <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center text-white shadow-lg">
             <Building2 className="w-5 h-5" />
           </div>
           <h1 className="text-xl font-bold tracking-tight hidden md:block">
@@ -37,7 +37,7 @@ export const LandingPage = () => {
                 .getElementById("features")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-sm font-bold transition-all"
+            className="nav-pill"
           >
             <Lock className="w-4 h-4" />
             <span>Sign In</span>
@@ -47,7 +47,7 @@ export const LandingPage = () => {
 
       {/* Hero Section */}
       <main className="flex-1 pt-20">
-        <section className="relative h-screen flex items-center justify-center px-6 lg:px-20" style={{ backgroundColor: '#D1E7F0' }}>
+        <section className="relative h-screen flex items-center justify-center px-6 lg:px-20">
           {/* Animated Background */}
           <div className="absolute inset-0 opacity-30">
             <Threads
@@ -63,7 +63,7 @@ export const LandingPage = () => {
               <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
               Live: City Systems Operational
             </div>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-6 text-gray-900">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-6 text-gray-900 drop-shadow-sm">
               Empowering Cities with{" "}
               <span className="text-blue-600">Real-Time</span> Intelligence
             </h1>
@@ -74,13 +74,13 @@ export const LandingPage = () => {
             <div className="flex flex-wrap justify-center gap-4">
               <button
                 onClick={() => navigate("/login/citizen")}
-                className="px-8 py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition-all"
+                className="px-8 py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
               >
                 Explore Live Map
               </button>
               <button
                 onClick={() => navigate("/login/government")}
-                className="px-8 py-4 bg-gray-200 text-gray-800 font-bold rounded-xl hover:bg-gray-300 transition-all"
+                className="px-8 py-4 bg-white/80 text-gray-900 font-bold rounded-xl border border-slate-200 shadow-sm hover:bg-white hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
               >
                 View Analytics
               </button>
@@ -100,12 +100,13 @@ export const LandingPage = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Citizen Portal */}
-            <div className="group relative overflow-hidden rounded-3xl bg-white shadow-lg p-8 transition-all hover:shadow-xl">
+            <div className="portal-card group">
+              <div className="portal-card-glow" />
               <div className="absolute top-0 right-0 p-8 text-gray-100">
                 <Users className="w-20 h-20" />
               </div>
               <div className="relative z-10 flex flex-col h-full">
-                <div className="w-14 h-14 rounded-2xl bg-blue-600 flex items-center justify-center text-white mb-6">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-500 flex items-center justify-center text-white mb-6 shadow-md">
                   <Globe className="w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-bold mb-3">Citizen Portal</h3>
@@ -125,7 +126,7 @@ export const LandingPage = () => {
                   </div>
                   <button
                     onClick={() => navigate('/login/citizen')}
-                    className="mt-6 w-full py-3 bg-blue-600 hover:bg-blue-700 border border-gray-200 text-white rounded-xl font-bold transition-all"
+                    className="primary-link"
                   >
                     Enter Citizen Dashboard
                   </button>
@@ -134,12 +135,13 @@ export const LandingPage = () => {
             </div>
 
             {/* Government Portal */}
-            <div className="group relative overflow-hidden rounded-3xl bg-white shadow-lg p-8 transition-all hover:shadow-xl">
+            <div className="portal-card group">
+              <div className="portal-card-glow" />
               <div className="absolute top-0 right-0 p-8 text-gray-100">
                 <Shield className="w-20 h-20" />
               </div>
               <div className="relative z-10 flex flex-col h-full">
-                <div className="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-700 mb-6">
+                <div className="w-14 h-14 rounded-2xl bg-slate-900 flex items-center justify-center text-white mb-6 shadow-md">
                   <BarChart3 className="w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-bold mb-3">Employee Portal</h3>
@@ -157,7 +159,7 @@ export const LandingPage = () => {
                   </div>
                   <button
                     onClick={() => navigate('/login/government')}
-                    className="mt-6 w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg transition-all hover:bg-blue-700"
+                    className="primary-link"
                   >
                     Admin Secure Login
                   </button>
@@ -169,7 +171,7 @@ export const LandingPage = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-100 px-6 lg:px-20 py-16">
+      <footer className="bg-white/60 backdrop-blur-md border-t border-slate-200 px-6 lg:px-20 py-8">
         <div className="text-center">
           <p className="text-gray-600">Built for smart urban development and healthier cities.</p>
         </div>

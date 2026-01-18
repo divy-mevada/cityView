@@ -2,7 +2,7 @@ import React from 'react';
 import { Sidebar } from '../components/Sidebar';
 import { useAuth } from '../context/AuthContext';
 import { BarChart3, TrendingUp, PieChart, Activity, LogOut } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Cell } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell } from 'recharts';
 
 const analyticsData = [
   { month: 'Jan', aqi: 145, traffic: 68, healthcare: 75, schools: 82 },
@@ -87,7 +87,7 @@ export const GovernmentAnalyticsPage: React.FC = () => {
                   cy="50%"
                   outerRadius={80}
                   dataKey="value"
-                  label={({ name, value }) => `${name}: ${value}%`}
+                  label={(props) => `${props.name}: ${props.value}%`}
                 >
                   {pieData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />

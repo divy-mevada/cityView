@@ -1,0 +1,44 @@
+{
+  "request": {
+    "lat": 23.03640229563277,
+    "lon": 72.61053879394657,
+    "scenario": "Building Highway at location. 4 land highway",
+    "duration_months": 12
+  },
+  "response": {
+    "annotated_aqi": 124.9,
+    "baseline_aqi": 129.2,
+    "impact_percentage": -3.33,
+    "details": {
+      "traffic_change_percent": -18,
+      "healthcare_index": 38,
+      "schools_index": 42,
+      "urban_dev_index": 68,
+      "reasoning": "The construction of a 4-lane highway in Ahmedabad is expected to have mixed impacts on the city. While it may reduce traffic congestion by -18%, it could also lead to increased air pollution, as the current AQI of 129.2016916658962 is already a concern. This may have negative effects on the health and quality of life for residents, particularly those living near the highway.",
+      "technical_details": {
+        "traffic_prediction": {
+          "action": "new_infrastructure",
+          "magnitude_percent": 25,
+          "location": "Major Corridor",
+          "duration_months": 60,
+          "traffic_impact": -18
+        },
+        "base_traffic": 0.5,
+        "new_traffic": 0.41000000000000003,
+        "aqi_prediction": {
+          "construction_type": "unknown",
+          "duration_months": 0,
+          "construction_impact_score": 0.0,
+          "operational_impact_score": 0.0,
+          "reasoning": "Failed to parse scenario."
+        },
+        "baseline_aqi": 129.2016916658962,
+        "traffic_aqi_shift": -4.301701713882384,
+        "final_aqi": 124.9,
+        "forecast_horizon_months": 6
+      }
+    }
+  },
+  "user": "divy",
+  "timestamp": "2026-01-18T15:56:58.918139"
+}

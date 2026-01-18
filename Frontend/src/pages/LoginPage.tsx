@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, User, Lock, ShieldCheck, Globe, Zap } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const { role } = useParams<{ role: 'citizen' | 'government' }>();
@@ -27,97 +27,147 @@ export const LoginPage: React.FC = () => {
       navigate(role === 'government' ? '/government' : '/citizen');
     } else {
       setError(role === 'government'
-        ? 'Invalid credentials. Use username: divy, password: 1234'
-        : 'Invalid credentials. Use username: tirth, password: 1234');
+        ? 'Invalid credentials. Hint: divy / 1234'
+        : 'Invalid credentials. Hint: tirth / 1234');
     }
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8" style={{ backgroundColor: '#D1E7F0' }}>
-      <div className="w-full max-w-md">
+    <div className="min-h-screen relative flex items-center justify-center px-4 py-8 overflow-hidden bg-[#f0f7ff]">
+      {/* --- AESTHETIC BACKGROUND LAYER --- */}
+      <div className="absolute inset-0 z-0">
+        {/* Animated Gradient Blobs */}
+        <div className="absolute top-[-10%] left-[-5%] w-[50%] h-[50%] rounded-full bg-blue-400/20 blur-[100px] animate-blob" />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[50%] h-[50%] rounded-full bg-indigo-400/20 blur-[100px] animate-blob animation-delay-2000" />
+        <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-sky-300/20 blur-[80px] animate-blob animation-delay-4000" />
+        
+        {/* Subtle Grid Overlay */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`, backgroundSize: '40px 40px' }}></div>
+      </div>
+
+      <div className="w-full max-w-md relative z-10">
         {/* Back Button */}
         <button
           onClick={() => navigate('/')}
-          className="flex items-center text-gray-600 hover:text-gray-900 transition-colors mb-8 -ml-2 pl-2 py-1"
+          className="group flex items-center text-blue-600/70 hover:text-blue-700 transition-all mb-8 font-bold"
         >
-          <ArrowLeft size={18} className="mr-1.5" />
-          <span className="text-sm font-medium">Back to Home</span>
+          <div className="p-2 rounded-xl bg-white/50 backdrop-blur-md group-hover:bg-white transition-all mr-3 shadow-sm border border-white/50">
+            <ArrowLeft size={18} />
+          </div>
+          <span className="text-sm tracking-wide">Back to Home</span>
         </button>
 
-        {/* Card Container */}
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+        {/* --- LOGIN CARD --- */}
+        <div className="bg-white/40 backdrop-blur-3xl rounded-[3rem] border border-white/60 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] overflow-hidden transition-all duration-700 hover:shadow-[0_40px_80px_-16px_rgba(59,130,246,0.15)]">
+          
+          {/* Top Header */}
+          <div className="px-8 pt-12 pb-8 text-center relative">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
+            
+            <div className="relative inline-flex items-center justify-center w-20 h-20 mb-6">
+              <div className="absolute inset-0 bg-blue-600 rounded-[2rem] rotate-6 opacity-20 animate-pulse"></div>
+              <div className="relative w-full h-full rounded-[1.8rem] bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-2xl flex items-center justify-center transform transition-transform hover:scale-105">
+                <ShieldCheck size={38} strokeWidth={1.5} />
+              </div>
+            </div>
 
-          {/* Header Section */}
-          <div className="px-6 py-8 border-b border-gray-100">
-            <h1 className="text-3xl font-bold text-gray-900 text-center mb-2">
-              {role === 'government' ? 'Government' : 'Citizen'} Portal
+            <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-2">
+              {role === 'government' ? 'Official' : 'Resident'} Login
             </h1>
-            <p className="text-center text-sm text-gray-600">
-              {role === 'government'
-                ? 'Employee Authentication'
-                : 'Secure Access to Services'}
-            </p>
+            <div className="flex items-center justify-center gap-2">
+              <span className="h-px w-4 bg-blue-200"></span>
+              <p className="text-blue-600/60 font-black text-[10px] uppercase tracking-[0.3em]">
+                {role === 'government' ? 'Secured Network' : 'City Access'}
+              </p>
+              <span className="h-px w-4 bg-blue-200"></span>
+            </div>
           </div>
 
-          {/* Form Section */}
-          <div className="px-6 py-8">
+          <div className="px-10 pb-12">
             <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Username
-                </label>
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder={role === 'government' ? 'Enter username (divy)' : 'Enter username (tirth)'}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 transition-colors focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-200"
-                  onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-                />
+              {/* Identity Field */}
+              <div className="group">
+                <div className="flex justify-between mb-2 px-1">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">User Identity</label>
+                  <Globe size={12} className="text-slate-300 group-focus-within:text-blue-400 transition-colors" />
+                </div>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                    <User size={18} />
+                  </div>
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder={role === 'government' ? 'Enter Admin ID' : 'Enter Resident ID'}
+                    className="w-full pl-12 pr-6 py-4.5 bg-white/60 border border-white rounded-[1.5rem] text-slate-900 placeholder-slate-400 transition-all focus:outline-none focus:bg-white focus:ring-[6px] focus:ring-blue-500/5 focus:border-blue-400 shadow-sm font-semibold"
+                    onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter password (1234)"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 transition-colors focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-200"
-                  onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-                />
+              {/* Password Field */}
+              <div className="group">
+                <div className="flex justify-between mb-2 px-1">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Security Key</label>
+                  <Zap size={12} className="text-slate-300 group-focus-within:text-blue-400 transition-colors" />
+                </div>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                    <Lock size={18} />
+                  </div>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full pl-12 pr-6 py-4.5 bg-white/60 border border-white rounded-[1.5rem] text-slate-900 placeholder-slate-400 transition-all focus:outline-none focus:bg-white focus:ring-[6px] focus:ring-blue-500/5 focus:border-blue-400 shadow-sm font-semibold"
+                    onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+                  />
+                </div>
               </div>
 
               {error && (
-                <div className="px-4 py-3 bg-red-50 border border-red-200 rounded-lg">
-                  <p className="text-sm text-red-700">{error}</p>
+                <div className="px-5 py-3 bg-red-500/10 border border-red-500/20 rounded-2xl animate-shake">
+                  <p className="text-[11px] font-bold text-red-600 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_8px_red]" />
+                    {error}
+                  </p>
                 </div>
               )}
 
+              {/* Action Button */}
               <button
                 onClick={handleLogin}
                 disabled={loading}
-                className="w-full px-4 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
+                className="w-full group relative py-5 bg-slate-900 text-white font-black rounded-[1.5rem] overflow-hidden transition-all shadow-xl active:scale-[0.98] disabled:opacity-50"
               >
-                {loading ? 'Signing In...' : 'Sign In'}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <span className="relative z-10 flex items-center justify-center gap-3 tracking-widest uppercase text-xs">
+                  {loading ? (
+                    <div className="w-5 h-5 border-[3px] border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>Establish Link <Zap size={16} fill="white" /> </>
+                  )}
+                </span>
               </button>
 
-              {role === 'government' ? (
-                <p>Demo: username: <span className="font-mono">divy</span>, password: <span className="font-mono">1234</span></p>
-              ) : (
-                <p>Demo: username: <span className="font-mono">tirth</span>, password: <span className="font-mono">1234</span></p>
-              )}
-              <div className="mt-4 pt-4 border-t border-gray-100">
-                <p className="text-sm text-gray-600">
-                  Don't have an account?{' '}
+              <div className="flex flex-col gap-4 items-center">
+                <div className="px-4 py-2 bg-blue-500/5 rounded-xl border border-blue-500/10">
+                   <p className="text-[10px] font-bold text-blue-600/60 uppercase tracking-tighter italic">
+                     Demo System: {role === 'government' ? 'divy' : 'tirth'} / 1234
+                   </p>
+                </div>
+                
+                <p className="text-sm font-bold text-slate-400">
+                  New user?{' '}
                   <button
                     onClick={() => navigate(`/register/${role}`)}
-                    className="text-blue-600 font-semibold hover:underline"
+                    className="text-blue-600 hover:text-indigo-600 transition-colors underline decoration-2 underline-offset-4"
                   >
-                    Sign Up
+                    Register Identity
                   </button>
                 </p>
               </div>
@@ -125,10 +175,17 @@ export const LoginPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Footer */}
-        <p className="text-xs text-gray-500 text-center mt-6">
-          Secure portal for smart city services
-        </p>
+        {/* --- SYSTEM FOOTER --- */}
+        <div className="mt-12 flex flex-col items-center gap-4">
+            <div className="flex gap-8">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] opacity-50">v4.0.2 Stable</span>
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] opacity-50">AES-256 Encrypted</span>
+            </div>
+            <div className="flex gap-3">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+              <span className="text-[10px] font-black text-emerald-600/70 uppercase tracking-widest">All City Systems Operational</span>
+            </div>
+        </div>
       </div>
     </div>
   );

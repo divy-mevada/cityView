@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Bot, User, MapPin, Activity, Car, Stethoscope, GraduationCap, Building2, MessageSquare } from 'lucide-react';
+import { Send, Bot, User, MessageSquare } from 'lucide-react';
 
 interface ChatMessage {
   id: string;
@@ -168,7 +168,7 @@ ${aiResult.details.ai_model_data ? '🤖 **AI Model Data Used:** Traffic and AQI
 
 🏗️ **Urban Development:** ${results.urbanDevelopment}% development index
 
-⚠️ Note: AI server unavailable, showing estimated values.`;
+ℹ️ Demo mode: using locally estimated values instead of live AI.`;
 
       const botMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -181,20 +181,6 @@ ${aiResult.details.ai_model_data ? '🤖 **AI Model Data Used:** Traffic and AQI
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const getColorForValue = (value: number, type: string) => {
-    if (type === 'aqi') {
-      if (value <= 50) return 'text-green-600';
-      if (value <= 100) return 'text-yellow-600';
-      return 'text-red-600';
-    }
-    if (type === 'traffic') {
-      if (value <= 40) return 'text-green-600';
-      if (value <= 70) return 'text-yellow-600';
-      return 'text-red-600';
-    }
-    return 'text-blue-600';
   };
 
   return (

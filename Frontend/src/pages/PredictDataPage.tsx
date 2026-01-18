@@ -20,18 +20,21 @@ export const PredictDataPage: React.FC = () => {
     const [projectDetails, setProjectDetails] = useState('');
     const [predicting, setPredicting] = useState(false);
     const [prediction, setPrediction] = useState<PredictionResult | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     const handleLocationSelect = (lat: number, lng: number) => {
         setSelectedLocation({ lat, lng });
+        setError(null); // Clear error when location changes
     };
 
     const handlePredict = async () => {
         if (!selectedLocation || !infrastructureType) {
-            alert('Please select a location and infrastructure type');
+            setError('Please select a location and infrastructure type');
             return;
         }
 
         setPredicting(true);
+        setError(null);
         try {
             const scenario = `Building ${infrastructureType} at location. ${projectDetails}`;
 
@@ -51,19 +54,42 @@ export const PredictDataPage: React.FC = () => {
 
             if (response.ok) {
                 const data = await response.json();
+                
+                // Validate response structure
+                if (!data.annotated_aqi || !data.details) {
+                    throw new Error('Invalid response format from server');
+                }
+                
                 setPrediction({
                     aqi: Math.round(data.annotated_aqi),
-                    traffic: Math.round(data.details.traffic_change_percent),
-                    healthcare: data.details.healthcare_index,
-                    education: data.details.schools_index,
+                    traffic: Math.round(data.details.traffic_change_percent || 0),
+                    healthcare: data.details.healthcare_index || 0,
+                    education: data.details.schools_index || 0,
                     reasoning: data.details.reasoning || 'Impact analysis completed'
                 });
             } else {
-                throw new Error('Prediction failed');
+                // Try to get error message from response
+                let errorMessage = 'Prediction failed';
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.error || errorData.message || errorMessage;
+                    
+                    // Provide helpful message for common errors
+                    if (response.status === 503) {
+                        errorMessage = 'AI server is not running. Please start the AI server on port 8001. See HOW_TO_RUN.md for instructions.';
+                    } else if (response.status === 500) {
+                        errorMessage = `Server error: ${errorMessage}`;
+                    }
+                } catch (e) {
+                    // If response is not JSON, use status text
+                    errorMessage = response.statusText || errorMessage;
+                }
+                throw new Error(errorMessage);
             }
         } catch (error) {
             console.error('Prediction error:', error);
-            alert('Failed to generate prediction. Please try again.');
+            const errorMessage = error instanceof Error ? error.message : 'Failed to generate prediction. Please check that the AI server is running on port 8001.';
+            setError(errorMessage);
         } finally {
             setPredicting(false);
         }
@@ -162,6 +188,18 @@ export const PredictDataPage: React.FC = () => {
                                 <TrendingUp className="w-5 h-5" />
                                 {predicting ? 'Generating Prediction...' : 'Generate Prediction'}
                             </button>
+                            
+                            {error && (
+                                <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                                    <p className="text-sm text-red-800 font-medium mb-1">Error:</p>
+                                    <p className="text-sm text-red-700">{error}</p>
+                                    {error.includes('AI server') && (
+                                        <p className="text-xs text-red-600 mt-2">
+                                            To start the AI server, run: <code className="bg-red-100 px-1 rounded">run_ai_server.bat</code> or <code className="bg-red-100 px-1 rounded">cd ai && python api_server.py</code>
+                                        </p>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

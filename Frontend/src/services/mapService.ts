@@ -93,6 +93,7 @@ export const mapService = {
         roadClosure: data.flowSegmentData?.roadClosure || false
       };
     } catch (error) {
+      console.error('Error fetching traffic data:', error);
       return {
         currentSpeed: Math.floor(Math.random() * 60) + 20,
         freeFlowSpeed: Math.floor(Math.random() * 20) + 60,

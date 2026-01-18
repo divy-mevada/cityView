@@ -136,28 +136,47 @@ export const CitizenDashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen" style={{ backgroundColor: '#D1E7F0' }}>
+    <div className="flex min-h-screen bg-gradient-to-br from-[#E0F2FE] via-[#F9FAFB] to-[#DBEAFE]">
       <Sidebar userRole="citizen" />
 
-      <main className="flex-1 ml-64 p-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Citizen Dashboard</h1>
-          <p className="text-gray-600">Monitor real-time city metrics and services</p>
+      <main className="flex-1 ml-64 p-8 space-y-6">
+        <div className="flex items-end justify-between mb-2">
+          <div>
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-1">Citizen Dashboard</h1>
+            <p className="text-slate-500">Monitor real-time city metrics and services</p>
+          </div>
+          <div className="hidden md:flex items-center gap-2 text-xs text-slate-500">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            Live city data stream
+          </div>
         </div>
 
         {/* Interactive Map Section */}
         <div className="card mb-6">
-          <h3 className="text-lg font-semibold mb-4">Interactive Map</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-blue-600" />
+              Interactive Prediction Map
+            </h3>
+            <div className="flex items-center gap-3 text-xs text-slate-500">
+              <span className="hidden sm:inline">Select a location on the map to personalize predictions</span>
+            </div>
+          </div>
 
           {/* Generate Button */}
-          <div className="mb-4">
+          <div className="mb-4 flex items-center justify-between gap-4 flex-wrap">
             <button
               onClick={handleGenerate}
               disabled={generating}
-              className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-xl shadow-md hover:bg-blue-700 hover:-translate-y-0.5 hover:shadow-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {generating ? 'Generating...' : 'Generate Predictions'}
             </button>
+            {selectedLocation && (
+              <p className="text-xs text-slate-500">
+                Selected: {selectedLocation.lat.toFixed(4)}, {selectedLocation.lng.toFixed(4)}
+              </p>
+            )}
           </div>
 
           {/* Map */}

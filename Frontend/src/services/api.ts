@@ -37,7 +37,7 @@ export const timelineOptions: TimelineOption[] = [
 ];
 
 export const apiService = {
-  getCityKPIs: async (timeline: string = 'current'): Promise<KPIData> => {
+  getCityKPIs: async (_timeline: string = 'current'): Promise<KPIData> => {
     await new Promise(resolve => setTimeout(resolve, 500));
     return mockKPIData;
   },

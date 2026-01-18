@@ -1,15 +1,21 @@
 import React from 'react';
 import { Sidebar } from '../components/Sidebar';
 import { useAuth } from '../context/AuthContext';
-import { Users, MapPin, TrendingUp, LogOut } from 'lucide-react';
-import { MapComponent } from '../components/MapComponent';
+import { Users, MapPin, TrendingUp } from 'lucide-react';
 
 export const FootfallEstimationPage: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   
   // Determine user role based on current path or user data
   const userRole = user?.role || 'citizen';
   
+  const populationData = [
+    { area: 'West Zone', population: 1200000, density: 'High', growth: '+2.4%' },
+    { area: 'East Zone', population: 950000, density: 'Medium', growth: '+1.8%' },
+    { area: 'North Zone', population: 780000, density: 'Medium', growth: '+2.1%' },
+    { area: 'South Zone', population: 650000, density: 'Emerging', growth: '+3.0%' },
+  ];
+
   const footfallData = [
     { location: 'CG Road', current: 2500, predicted: 3200, capacity: 4000 },
     { location: 'Maninagar', current: 1800, predicted: 2100, capacity: 3000 },
@@ -34,13 +40,33 @@ export const FootfallEstimationPage: React.FC = () => {
           <p className="text-gray-600">Real-time and predicted footfall data for Ahmedabad areas</p>
         </div>
 
-        {/* Map */}
+        {/* Population Overview */}
         <div className="card mb-6">
           <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <MapPin className="w-5 h-5" />
-            Footfall Heat Map
+            Population Across Ahmedabad Zones
           </h3>
-          <MapComponent layers={['footfall']} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {populationData.map((item) => (
+              <div key={item.area} className="bg-gray-50 rounded-lg p-4 flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-medium text-gray-900">{item.area}</h4>
+                  <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+                    {item.density}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-600">
+                  Population:{' '}
+                  <span className="font-semibold text-gray-900">
+                    {(item.population / 1000000).toFixed(2)}M
+                  </span>
+                </p>
+                <p className="text-xs font-semibold text-emerald-600">
+                  Yearly growth: {item.growth}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Live Footfall */}

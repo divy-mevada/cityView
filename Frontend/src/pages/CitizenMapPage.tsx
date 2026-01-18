@@ -133,13 +133,19 @@ export const CitizenMapPage: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen" style={{ backgroundColor: '#D1E7F0' }}>
+    <div className="flex min-h-screen bg-gradient-to-br from-[#E0F2FE] via-[#F9FAFB] to-[#DBEAFE]">
       <Sidebar userRole={userRole as 'citizen' | 'government'} />
 
-      <main className="flex-1 ml-64 p-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Interactive Map</h1>
-          <p className="text-gray-600">Explore Ahmedabad city with multiple data layers</p>
+      <main className="flex-1 ml-64 p-8">
+        <div className="mb-6 flex items-end justify-between">
+          <div>
+            <h1 className="text-3xl font-extrabold text-slate-900 mb-1">Interactive Map</h1>
+            <p className="text-slate-500">Explore Ahmedabad city with multiple data layers</p>
+          </div>
+          <div className="hidden md:flex items-center gap-2 text-xs text-slate-500">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            Map data synced
+          </div>
         </div>
 
         {/* Full Width Map */}

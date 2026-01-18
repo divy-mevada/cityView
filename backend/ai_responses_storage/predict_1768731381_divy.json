@@ -1,0 +1,44 @@
+{
+  "request": {
+    "lat": 23.02688636326002,
+    "lon": 72.58014327802562,
+    "scenario": "Building Metro Station at location. 4 lane bridge",
+    "duration_months": 6
+  },
+  "response": {
+    "annotated_aqi": 188.16,
+    "baseline_aqi": 175.2,
+    "impact_percentage": 7.4,
+    "details": {
+      "traffic_change_percent": 40,
+      "healthcare_index": 60,
+      "schools_index": 40,
+      "urban_dev_index": 80,
+      "reasoning": "The construction of a metro station and a 4-lane bridge in Ahmedabad will significantly reduce traffic congestion, thereby decreasing air pollution. However, the initial construction phase may lead to increased particulate matter and noise pollution. The overall impact on the city's infrastructure will be positive, with improved connectivity and reduced travel times.",
+      "technical_details": {
+        "traffic_prediction": {
+          "action": "new_project",
+          "magnitude_percent": 75,
+          "location": "4 lane bridge",
+          "duration_months": 48,
+          "traffic_impact": 40
+        },
+        "base_traffic": 0.5,
+        "new_traffic": 0.7,
+        "aqi_prediction": {
+          "construction_type": "unknown",
+          "duration_months": 0,
+          "construction_impact_score": 0.0,
+          "operational_impact_score": 0.0,
+          "reasoning": "Failed to parse scenario."
+        },
+        "baseline_aqi": 175.2016916658962,
+        "traffic_aqi_shift": 12.962771747657039,
+        "final_aqi": 188.16,
+        "forecast_horizon_months": 6
+      }
+    }
+  },
+  "user": "divy",
+  "timestamp": "2026-01-18T15:46:21.507067"
+}

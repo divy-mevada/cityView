@@ -1,0 +1,44 @@
+{
+  "request": {
+    "lat": 23.070088568020466,
+    "lon": 72.52402017419905,
+    "scenario": "Building School at location. 5 blocks school",
+    "duration_months": 6
+  },
+  "response": {
+    "annotated_aqi": 122.51,
+    "baseline_aqi": 119.2,
+    "impact_percentage": 2.77,
+    "details": {
+      "traffic_change_percent": 15,
+      "healthcare_index": 40,
+      "schools_index": 90,
+      "urban_dev_index": 60,
+      "reasoning": "Building a school in Ahmedabad will likely have a positive impact on the community, particularly in terms of education and social development. However, the increased traffic and potential air pollution may offset some of these benefits, especially considering the already moderate Air Quality Index (AQI) of 119.20169166589619. The 15% traffic change may lead to increased congestion and decreased air quality.",
+      "technical_details": {
+        "traffic_prediction": {
+          "action": "new_project",
+          "magnitude_percent": 10,
+          "location": "local_arterial",
+          "duration_months": 18,
+          "traffic_impact": 15
+        },
+        "base_traffic": 0.5,
+        "new_traffic": 0.575,
+        "aqi_prediction": {
+          "construction_type": "unknown",
+          "duration_months": 0,
+          "construction_impact_score": 0.0,
+          "operational_impact_score": 0.0,
+          "reasoning": "Failed to parse scenario."
+        },
+        "baseline_aqi": 119.20169166589619,
+        "traffic_aqi_shift": 3.307297520162261,
+        "final_aqi": 122.51,
+        "forecast_horizon_months": 6
+      }
+    }
+  },
+  "user": "divy",
+  "timestamp": "2026-01-18T15:47:06.664680"
+}

@@ -19,7 +19,7 @@ interface LocationInfo {
   loading?: boolean;
 }
 
-export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = '', onLocationSelect }) => {
+export const MapComponent: React.FC<MapComponentProps> = ({ className = '', onLocationSelect }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<maplibregl.Map | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<LocationInfo | null>(null);

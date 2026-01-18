@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Sidebar } from '../components/Sidebar';
 import { useAuth } from '../context/AuthContext';
-import { Settings, Plus, Play, Save, Trash2, Copy, LogOut } from 'lucide-react';
+import { Plus, Play, Trash2, Copy, LogOut } from 'lucide-react';
 
 interface Scenario {
   id: string;

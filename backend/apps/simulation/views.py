@@ -107,8 +107,21 @@ def predict(request):
         )
         
         if response.status_code != 200:
+            # Try to parse error message from response
+            error_message = f'AI Server error (status {response.status_code})'
+            try:
+                error_data = response.json()
+                if 'detail' in error_data:
+                    error_message = error_data['detail']
+                elif 'error' in error_data:
+                    error_message = error_data['error']
+                else:
+                    error_message = response.text[:200]  # Limit error text length
+            except:
+                error_message = response.text[:200] if response.text else error_message
+            
             return Response(
-                {'error': f'AI Server error: {response.text}'},
+                {'error': error_message},
                 status=response.status_code
             )
             
@@ -141,14 +154,25 @@ def predict(request):
             
         return Response(data, status=status.HTTP_200_OK)
         
-    except requests.exceptions.ConnectionError:
+    except requests.exceptions.ConnectionError as e:
         return Response(
-            {'error': 'AI server (FastAPI) is not running on port 8001'},
+            {
+                'error': f'AI server (FastAPI) is not running on {ai_server_url}. Please start the AI server using: cd ai && python api_server.py'
+            },
             status=status.HTTP_503_SERVICE_UNAVAILABLE
         )
-    except Exception as e:
+    except requests.exceptions.Timeout:
         return Response(
-            {'error': str(e)},
+            {'error': 'AI server request timed out. The prediction may be taking too long.'},
+            status=status.HTTP_504_GATEWAY_TIMEOUT
+        )
+    except Exception as e:
+        import traceback
+        error_details = str(e)
+        # Log full traceback for debugging
+        print(f"Prediction error: {traceback.format_exc()}")
+        return Response(
+            {'error': f'Internal server error: {error_details}'},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
