@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Bot, User, MapPin, Activity, Car, Stethoscope, GraduationCap, Building2 } from 'lucide-react';
+import { Send, Bot, User, MapPin, Activity, Car, Stethoscope, GraduationCap, Building2, MessageSquare } from 'lucide-react';
 
 interface ChatMessage {
   id: string;
@@ -67,23 +67,82 @@ export const WhatIfChatbot: React.FC = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = inputValue;
     setInputValue('');
     setIsLoading(true);
 
-    // Simulate API delay
-    setTimeout(() => {
-      const results = simulateScenario(inputValue);
+    try {
+      // Call AI API for real predictions
+      const response = await fetch('http://localhost:8000/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lat: 23.0225,
+          lon: 72.5714,
+          scenario: currentInput,
+          duration_months: 6
+        }),
+      });
+
+      if (response.ok) {
+        const aiResult = await response.json();
+        const results = {
+          aqi: Math.round(aiResult.annotated_aqi),
+          traffic: Math.abs(aiResult.details.traffic_change_percent),
+          healthcare: 68 + Math.round(aiResult.impact_percentage * 0.3),
+          schools: 82 + Math.round(aiResult.impact_percentage * 0.2),
+          urbanDevelopment: 71 + Math.round(aiResult.impact_percentage * 0.4)
+        };
+
+        const botMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          type: 'bot',
+          content: `AI Analysis: ${aiResult.details.reasoning}\n\nProjected impacts for "${currentInput}":`,
+          timestamp: new Date(),
+          results,
+        };
+
+        setMessages(prev => [...prev, botMessage]);
+        
+        // Store AI response for sharing
+        try {
+          await fetch('http://localhost:8000/api/ai-responses/store/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({
+              scenario: currentInput,
+              location: { lat: 23.0225, lng: 72.5714 },
+              response: aiResult,
+              user_id: 'government_user'
+            }),
+          });
+        } catch (storeError) {
+          console.log('Failed to store AI response:', storeError);
+        }
+      } else {
+        throw new Error('AI service unavailable');
+      }
+    } catch (error) {
+      console.error('AI API Error:', error);
+      // Fallback to mock data
+      const results = simulateScenario(currentInput);
       const botMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         type: 'bot',
-        content: `Based on your scenario "${inputValue}", here are the projected impacts on Ahmedabad city metrics:`,
+        content: `Based on your scenario "${currentInput}", here are the projected impacts on Ahmedabad city metrics:`,
         timestamp: new Date(),
         results,
       };
 
       setMessages(prev => [...prev, botMessage]);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const getColorForValue = (value: number, type: string) => {

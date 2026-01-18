@@ -137,5 +137,44 @@ export const apiService = {
 
   getAQIData: async (lat: number, lng: number) => {
     return weatherService.getAQIData(lat, lng);
+  },
+
+  // AI Response services
+  storeAIResponse: async (scenario: string, location: {lat: number, lng: number}, response: any, userId: string) => {
+    const apiResponse = await fetch('http://localhost:8000/api/ai-responses/store/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify({
+        scenario,
+        location,
+        response,
+        user_id: userId
+      }),
+    });
+    return apiResponse.json();
+  },
+
+  getAIResponses: async (limit: number = 10, userId?: string) => {
+    const params = new URLSearchParams({ limit: limit.toString() });
+    if (userId) params.append('user_id', userId);
+    
+    const response = await fetch(`http://localhost:8000/api/ai-responses/list/?${params}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    return response.json();
+  },
+
+  getAIResponse: async (responseId: string) => {
+    const response = await fetch(`http://localhost:8000/api/ai-responses/${responseId}/`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    return response.json();
   }
 };

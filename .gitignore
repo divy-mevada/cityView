@@ -62,3 +62,8 @@ checkpoints/
 *.tmp
 *.temp
 *.log
+
+# Compiled Stan/C++
+*.exe
+*.stan
+*.hpp

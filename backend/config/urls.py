@@ -19,4 +19,5 @@ urlpatterns = [
     path('api/demand/', include('apps.demand.urls')),
     path('api/simulation/', include('apps.simulation.urls')),
     path('api/scenarios/', include('apps.scenarios.urls')),
+    path('api/ai-responses/', include('apps.ai_responses.urls')),
 ]

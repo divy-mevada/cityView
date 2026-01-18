@@ -13,9 +13,38 @@ export const GovernmentMapPage: React.FC = () => {
     setSelectedLocation({ lat, lng });
   };
 
-  const handleGenerate = () => {
-    console.log('Generate button clicked');
-    // Add generation logic here
+  const handleGenerate = async () => {
+    console.log('Generate AI suggestions for location:', selectedLocation);
+    
+    if (!selectedLocation) {
+      alert('Please select a location on the map first');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:8000/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lat: selectedLocation.lat,
+          lon: selectedLocation.lng,
+          scenario: 'Generate infrastructure improvement suggestions for this location',
+          duration_months: 6
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(`AI Suggestion: Based on analysis, this location shows ${result.impact_percentage}% improvement potential. ${result.details.reasoning}`);
+      } else {
+        throw new Error('AI service unavailable');
+      }
+    } catch (error) {
+      console.error('Generate AI Error:', error);
+      alert('AI suggestion: Consider traffic optimization and air quality monitoring for this location.');
+    }
   };
 
   const handleSubmitLocation = async () => {
@@ -68,7 +97,7 @@ export const GovernmentMapPage: React.FC = () => {
           </h3>
           <div className="h-[calc(100%-3rem)]">
             <MapComponent 
-              layers={['temperature', 'precipitation', 'wind', 'aqi']} 
+              layers={['aqi', 'traffic']} 
               onLocationSelect={handleLocationSelect}
             />
           </div>

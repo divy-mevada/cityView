@@ -18,7 +18,7 @@ interface LocationInfo {
   loading?: boolean;
 }
 
-export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = '' }) => {
+export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = '', onLocationSelect }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<maplibregl.Map | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<LocationInfo | null>(null);
@@ -117,6 +117,11 @@ export const MapComponent: React.FC<MapComponentProps> = ({ layers, className = 
       // Add click event listener for location selection
       mapInstanceRef.current.on('click', async (e) => {
         const { lng, lat } = e.lngLat;
+        
+        // Call parent callback if provided
+        if (onLocationSelect) {
+          onLocationSelect(lat, lng);
+        }
         
         // Remove previous marker if exists
         if (currentMarkerRef.current) {

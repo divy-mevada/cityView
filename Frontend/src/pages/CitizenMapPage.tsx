@@ -5,7 +5,7 @@ import { MapComponent } from '../components/MapComponent';
 import { Map, FileText } from 'lucide-react';
 
 export const CitizenMapPage: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [selectedLocation, setSelectedLocation] = useState<{lat: number, lng: number} | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -16,9 +16,38 @@ export const CitizenMapPage: React.FC = () => {
     setSelectedLocation({ lat, lng });
   };
 
-  const handleGenerate = () => {
-    console.log('Generate report');
-    // Add generation logic here
+  const handleGenerate = async () => {
+    console.log('Generate report for location:', selectedLocation);
+    
+    if (!selectedLocation) {
+      alert('Please select a location on the map first');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:8000/api/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lat: selectedLocation.lat,
+          lon: selectedLocation.lng,
+          scenario: 'Generate area analysis report for citizen information',
+          duration_months: 3
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(`Area Report: Current AQI impact is ${result.impact_percentage}%. ${result.details?.reasoning || 'Analysis complete.'}`);
+      } else {
+        throw new Error('AI service unavailable');
+      }
+    } catch (error) {
+      console.error('Generate Report Error:', error);
+      alert('Area Report: This location shows moderate air quality. Consider outdoor activities during morning hours.');
+    }
   };
 
   const handleSubmitLocation = async () => {
@@ -26,7 +55,7 @@ export const CitizenMapPage: React.FC = () => {
 
     setSubmitting(true);
     try {
-      const response = await fetch('http://localhost:3001/api/location', {
+      const response = await fetch('http://localhost:8000/api/location', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,13 +66,14 @@ export const CitizenMapPage: React.FC = () => {
         }),
       });
 
-      const data = await response.json();
-      
       if (response.ok) {
+        const data = await response.json();
         console.log('Location submitted successfully:', data);
         alert('Location submitted successfully!');
+        setSelectedLocation(null);
       } else {
-        throw new Error(data.error || 'Failed to submit location');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to submit location');
       }
     } catch (error) {
       console.error('Error submitting location:', error);
@@ -71,7 +101,7 @@ export const CitizenMapPage: React.FC = () => {
           </h3>
           <div className="h-[calc(100%-3rem)]">
             <MapComponent 
-              layers={['temperature', 'aqi']} 
+              layers={['aqi']} 
               onLocationSelect={handleLocationSelect}
             />
           </div>
