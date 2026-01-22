@@ -10,10 +10,10 @@ The Ahmedabad Smart City Platform is a comprehensive urban management solution d
 
 **Key Objectives:**
 - Enable data-driven decision making for city administrators
-- Provide transparent access to city metrics for citizens
-- Facilitate predictive analysis and scenario planning
-- Integrate multiple data sources into a unified dashboard
-- Support both real-time monitoring and historical trend analysis
+- Provide transparent access to city metrics for citizens.
+- Facilitate predictive analysis and scenario planning.
+- Integrate multiple data sources into a unified dashboard.
+- Support both real-time monitoring and historical trend analysis.
 
 **Target Users:**
 - **Government Officials**: City planners, administrators, and policy makers requiring comprehensive analytics
